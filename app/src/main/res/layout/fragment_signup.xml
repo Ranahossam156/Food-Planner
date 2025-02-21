@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".view.LoginFragment">
+    tools:context=".view.SignupFragment">
 
     <EditText
-        android:id="@+id/emailTextField"
+        android:id="@+id/emailTextFieldSignup"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
@@ -33,11 +33,11 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/emailTextField"
+        app:layout_constraintStart_toStartOf="@+id/emailTextFieldSignup"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/RepeatPasswordTextField"
+        android:id="@+id/RepeatPasswordTextFieldSignup"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
@@ -64,11 +64,20 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/RepeatPasswordTextField"
+        app:layout_constraintStart_toStartOf="@+id/RepeatPasswordTextFieldSignup"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="39dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="472dp"
+        android:layout_marginEnd="176dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/appCompatButton"
+        android:id="@+id/SignupButton"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
@@ -87,7 +96,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/materialButton"
+        android:id="@+id/googleButtonSignup"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
@@ -115,13 +124,13 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="Already have an account?"
-        app:layout_constraintEnd_toStartOf="@+id/textView10"
+        app:layout_constraintEnd_toStartOf="@+id/AlreadyHaveAnAccountBtn"
         app:layout_constraintHorizontal_bias="0.275"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialButton" />
+        app:layout_constraintTop_toBottomOf="@+id/googleButtonSignup" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/AlreadyHaveAnAccountBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="280dp"
@@ -129,7 +138,7 @@
         android:text="Sign in"
         android:textColor="@color/primaryColor"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialButton" />
+        app:layout_constraintTop_toBottomOf="@+id/googleButtonSignup" />
 
     <View
         android:id="@+id/divider"
@@ -141,7 +150,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatButton" />
+        app:layout_constraintTop_toBottomOf="@+id/SignupButton" />
 
     <View
         android:id="@+id/divider2"
@@ -153,7 +162,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatButton" />
+        app:layout_constraintTop_toBottomOf="@+id/SignupButton" />
 
     <TextView
         android:id="@+id/textView7"
@@ -166,10 +175,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatButton" />
+        app:layout_constraintTop_toBottomOf="@+id/SignupButton" />
 
     <EditText
-        android:id="@+id/PasswordTextField"
+        android:id="@+id/PasswordTextFieldSignup"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
@@ -196,7 +205,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/PasswordTextField"
+        app:layout_constraintStart_toStartOf="@+id/PasswordTextFieldSignup"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView

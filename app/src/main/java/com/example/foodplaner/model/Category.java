@@ -1,6 +1,6 @@
 package com.example.foodplaner.model;
 
-class Category {
+public class Category {
     private String strCategory;
     private String strCategoryDescription;
     private String idCategory;

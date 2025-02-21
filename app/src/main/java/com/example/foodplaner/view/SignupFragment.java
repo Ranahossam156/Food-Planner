@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -28,35 +29,34 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.regex.Pattern;
 
-public class SigninFragment extends Fragment {
-    EditText emailEditText, passwordEditText;
-    Button signInButton;
-    TextView doNotHaveAnAccount;
+public class SignupFragment extends Fragment {
+    EditText emailEditText, passwordEditText, repeatPasswordEditText;
+    Button signupButton;
+    TextView AlreadyHaveAnAccount;
     FirebaseAuth auth;
     ProgressBar progressBar;
+    private static final Pattern PASSWORD_PATTERN =
+            Pattern.compile("^" +
+                    "(?=.*[@#$%^&+=])" +
+                    "(?=\\S+$)" +
+                    ".{4,}" +
+                    "$");
 
-    public SigninFragment() {
+    public SignupFragment() {
         // Required empty public constructor
     }
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = auth.getCurrentUser();
-//        if(currentUser != null){
-//
-//        }
-//    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_signin, container, false);
+        return inflater.inflate(R.layout.fragment_signup, container, false);
     }
 
     @Override
@@ -66,48 +66,38 @@ public class SigninFragment extends Fragment {
         if (bottomNav != null) {
             bottomNav.setVisibility(View.GONE);
         }
-        emailEditText =view.findViewById(R.id.emailTextFieldlogin);
-        passwordEditText =view.findViewById(R.id.PasswordTextFieldlogin);
-        signInButton=view.findViewById(R.id.signinButton);
-        doNotHaveAnAccount=view.findViewById(R.id.doNotHaveAnAccount);
-        progressBar=view.findViewById(R.id.progressBar2);
+        emailEditText =view.findViewById(R.id.emailTextFieldSignup);
+        passwordEditText =view.findViewById(R.id.PasswordTextFieldSignup);
+        repeatPasswordEditText =view.findViewById(R.id.RepeatPasswordTextFieldSignup);
+        signupButton=view.findViewById(R.id.SignupButton);
+        AlreadyHaveAnAccount=view.findViewById(R.id.AlreadyHaveAnAccountBtn);
+        progressBar=view.findViewById(R.id.progressBar);
         progressBar.setVisibility(view.GONE);
         auth=FirebaseAuth.getInstance();
-        doNotHaveAnAccount.setOnClickListener(new View.OnClickListener() {
+        signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragmentContainerView, new SignupFragment());
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-        signInButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-                String email,password;
+                String email,password,repeatedPassword;
                 email =String.valueOf(emailEditText.getText());
                 password=String.valueOf(passwordEditText.getText());
                 if(isFieldsValid())
                 {
-                    progressBar.setVisibility(View.VISIBLE);
-                    auth.signInWithEmailAndPassword(email, password)
+                    progressBar.setVisibility(view.VISIBLE);
+                    auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    progressBar.setVisibility(View.GONE);
+                                    progressBar.setVisibility(view.GONE);
                                     if (task.isSuccessful()) {
+                                        Log.d("TAG", "createUserWithEmail:success");
                                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                        transaction.replace(R.id.fragmentContainerView, new HomeFragment());
+                                        transaction.replace(R.id.fragmentContainerView, new SigninFragment());
                                         transaction.addToBackStack(null);
                                         transaction.commit();
-                                        Log.d("TAG", "signInWithEmail:success");
-                                        FirebaseUser user = auth.getCurrentUser();
-                                       // updateUI(user);
+//                                        FirebaseUser user = auth.getCurrentUser();
+//                                        updateUI(user);
                                     } else {
-                                        Log.w("TAG", "signInWithEmail:failure", task.getException());
+                                        Log.w("TAG", "createUserWithEmail:failure", task.getException());
                                         Toast.makeText(getContext(), "Authentication failed.",
                                                 Toast.LENGTH_SHORT).show();
                                         //updateUI(null);
@@ -117,7 +107,17 @@ public class SigninFragment extends Fragment {
                 }
             }
         });
+        AlreadyHaveAnAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragmentContainerView, new SigninFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
     }
+
     private boolean validateEmail() {
 
         String emailInput = emailEditText.getText().toString().trim();
@@ -142,7 +142,10 @@ public class SigninFragment extends Fragment {
             passwordEditText.setError("Field can not be empty");
             return false;
         }
-        else {
+        else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
+            passwordEditText.setError("Password is too weak");
+            return false;
+        } else {
             passwordEditText.setError(null);
             return true;
         }
@@ -152,6 +155,24 @@ public class SigninFragment extends Fragment {
         {
             return false;
         }
+        else if (!repeatPasswordEditText.getText().toString().trim().equals(passwordEditText.getText().toString().trim())) {
+            repeatPasswordEditText.setError("Password not match");
+            return false;
+        }
+        else if (repeatPasswordEditText.getText().toString().trim().isEmpty()) {
+            repeatPasswordEditText.setError("Field can not be empty");
+            return false;
+        }
         return true;
+    }
+
+    public void confirmInput(View v) {
+        if (!validateEmail() | !validatePassword()) {
+            return;
+        }
+        String input = "Email: " + emailEditText.getText().toString();
+        input += "\n";
+        input += "Password: " + passwordEditText.getText().toString();
+        Toast.makeText(getContext(), input, Toast.LENGTH_SHORT).show();
     }
 }
