@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Food Planer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="TodayInspiration">Today Inspiration</string>
+    <string name="Pasta">Pasta</string>
+    <string name="Categories">Categories</string>
+</resources>
