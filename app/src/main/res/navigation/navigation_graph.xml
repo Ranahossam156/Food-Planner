@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.foodplaner.view.SignupFragment"
+        android:name="com.example.foodplaner.Features.Authentication.view.SignupFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_signup" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/signinFragment"
-        android:name="com.example.foodplaner.view.SigninFragment"
+        android:name="com.example.foodplaner.Features.Authentication.view.SigninFragment"
         android:label="fragment_signin"
         tools:layout="@layout/fragment_signin" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.foodplaner.view.HomeFragment"
+        android:name="com.example.foodplaner.Features.Home.view.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment

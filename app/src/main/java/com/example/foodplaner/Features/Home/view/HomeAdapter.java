@@ -1,4 +1,4 @@
-package com.example.foodplaner.view;
+package com.example.foodplaner.Features.Home.view;
 
 import android.content.Context;
 import android.os.Handler;

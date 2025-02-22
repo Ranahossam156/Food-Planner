@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".view.SignupFragment">
+    tools:context=".Features.Authentication.view.SignupFragment">
 
     <EditText
         android:id="@+id/emailTextFieldlogin"

@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="#FFFFFF"
         android:backgroundTint="#FFFFFF"
-        tools:context=".view.HomeFragment">
+        tools:context=".Features.Home.view.HomeFragment">
 
         <TextView
             android:id="@+id/titleText"
@@ -48,7 +48,7 @@
                 android:background="@color/primaryColor">
 
                 <ImageView
-                    android:id="@+id/idIVCourseImage"
+                    android:id="@+id/MealOfTheDayImage"
                     android:layout_width="175dp"
                     android:layout_height="0dp"
                     android:scaleType="centerCrop"
@@ -58,7 +58,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/CategoryName"
+                    android:id="@+id/MealOfTheDayName"
                     android:layout_width="123dp"
                     android:layout_height="45dp"
                     android:layout_marginStart="10dp"
@@ -68,7 +68,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/idIVCourseImage"
+                    app:layout_constraintStart_toEndOf="@id/MealOfTheDayImage"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
