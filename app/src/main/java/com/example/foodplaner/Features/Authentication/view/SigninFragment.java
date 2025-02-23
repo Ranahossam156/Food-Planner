@@ -49,7 +49,7 @@ public class SigninFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.web_id_firebase))
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -73,6 +73,7 @@ public class SigninFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBar2);
         googleSignIn = view.findViewById(R.id.googleButtonLogin);
         progressBar.setVisibility(View.GONE);
+        auth=FirebaseAuth.getInstance();
 
         doNotHaveAnAccount.setOnClickListener(view1 -> {
             FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();

@@ -17,8 +17,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.foodplaner.Features.Home.presenter.HomePresenter;
 import com.example.foodplaner.Features.Home.presenter.HomePresenterImplementation;
+import com.example.foodplaner.model.Categories;
 import com.example.foodplaner.model.Category;
 import com.example.foodplaner.R;
+import com.example.foodplaner.model.CountryModel;
 import com.example.foodplaner.model.Meal;
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepositoryImplementation;
@@ -29,12 +31,13 @@ import java.util.List;
 
 
 public class HomeFragment extends Fragment implements HomeView{
-    HomeAdapter homeAdapter;
-    RecyclerView recyclerView;
+    CategoriesAdapter categoriesAdapter;
+    RecyclerView CategoriesrecyclerView,countriesrecyclerView;
     ImageView mealOfTheDayImage;
     TextView mealOfTheDayName;
     private Meal randomMeal;
     HomePresenter homePresenter;
+    CountriesAdapter countriesAdapter;
 
 
 
@@ -49,6 +52,7 @@ public class HomeFragment extends Fragment implements HomeView{
         homePresenter = new HomePresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsRemoteDataSourceImplementaion.getInstance()));
         homePresenter.getRandomMeal();
 
+
     }
 
     @Override
@@ -61,23 +65,31 @@ public class HomeFragment extends Fragment implements HomeView{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.CategoriesRecyclerView);
-        recyclerView.setHasFixedSize(true);
+        CategoriesrecyclerView = view.findViewById(R.id.CategoriesRecyclerView);
+        CategoriesrecyclerView.setHasFixedSize(true);
+        countriesrecyclerView=view.findViewById(R.id.CountriesRecyclerView);
+        countriesrecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        recyclerView.setLayoutManager(layoutManager);
-        homeAdapter = new HomeAdapter(getContext());
-        recyclerView.setAdapter(homeAdapter);
+        LinearLayoutManager countrieslayoutManager = new LinearLayoutManager(this.getContext());
+        countrieslayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        CategoriesrecyclerView.setLayoutManager(layoutManager);
+        countriesrecyclerView.setLayoutManager(countrieslayoutManager);
+        categoriesAdapter = new CategoriesAdapter(getContext());
+        countriesAdapter=new CountriesAdapter(getContext());
+        countriesrecyclerView.setAdapter(countriesAdapter);
+        CategoriesrecyclerView.setAdapter(categoriesAdapter);
         List<Category> categories = new ArrayList<>();
         mealOfTheDayImage=view.findViewById(R.id.MealOfTheDayImage);
         mealOfTheDayName=view.findViewById(R.id.MealOfTheDayName);
 
-        categories.add(new Category("Beef", "Beef Desc", "1","https://www.themealdb.com/images/category/beef.png"));
-        categories.add(new Category("Chicken", "Chicken desc", "2","https://www.themealdb.com/images/category/chicken.png"));
-        // Add more categories...
-
-        homeAdapter.setProductList(categories);
+//        categories.add(new Category("Beef", "Beef Desc", "1","https://www.themealdb.com/images/category/beef.png"));
+//        categories.add(new Category("Chicken", "Chicken desc", "2","https://www.themealdb.com/images/category/chicken.png"));
+//
+//        categoriesAdapter.setCategoryList(categories);
         homePresenter.getRandomMeal();
+        homePresenter.getCategories();
+        homePresenter.getCountries();
         //presenter.subscribeFavorites();
     }
 
@@ -85,12 +97,22 @@ public class HomeFragment extends Fragment implements HomeView{
     public void onGetMealOfTheDay(Meal meal) {
         if (meal != null && meal.getMeals() != null && !meal.getMeals().isEmpty()) {
             MealElement mealElement = meal.getMeals().get(0);
-            // Update the meal name
             mealOfTheDayName.setText(mealElement.getStrMeal());
-            // Load the meal image using Glide
             Glide.with(requireContext())
                     .load(mealElement.getStrMealThumb())
                     .into(mealOfTheDayImage);
         }
+    }
+
+    @Override
+    public void getCategories(Categories categoryList) {
+        categoriesAdapter.setCategoryList(categoryList.getCategories());
+        categoriesAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getCountries(CountryModel countryModel) {
+        countriesAdapter.setCountryList(countryModel.getMeals());
+        countriesAdapter.notifyDataSetChanged();
     }
 }

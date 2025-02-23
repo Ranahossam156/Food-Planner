@@ -112,7 +112,7 @@
             app:layout_constraintTop_toBottomOf="@id/CategoriesRecyclerView" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/secondRecyclerView"
+            android:id="@+id/CountriesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -132,7 +132,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/secondRecyclerView" />
+            app:layout_constraintTop_toBottomOf="@id/CountriesRecyclerView" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/thirdRecyclerView"

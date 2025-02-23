@@ -21,14 +21,14 @@ import com.example.foodplaner.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
+public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.HomeViewHolder> {
 
     private List<Category> categoryList=new ArrayList<>();
     private Context context;
     private static final String TAG = "RecyclerView";
     private Handler handler = new Handler(Looper.getMainLooper());
 
-    public HomeAdapter(Context context) {
+    public CategoriesAdapter(Context context) {
         this.context = context;
     }
 
@@ -55,8 +55,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         return categoryList.size();
     }
 
-    public void setProductList(List<Category> productList) {
-        this.categoryList = productList;
+    public void setCategoryList(List<Category> categoryList) {
+        this.categoryList = categoryList;
         notifyDataSetChanged();
     }
 
