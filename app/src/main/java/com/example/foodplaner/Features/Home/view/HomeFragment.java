@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.example.foodplaner.model.Category;
 import com.example.foodplaner.R;
 import com.example.foodplaner.model.CountryModel;
 import com.example.foodplaner.model.Meal;
+import com.example.foodplaner.model.MealCountry;
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepositoryImplementation;
 import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
@@ -94,25 +96,51 @@ public class HomeFragment extends Fragment implements HomeView{
     }
 
     @Override
-    public void onGetMealOfTheDay(Meal meal) {
-        if (meal != null && meal.getMeals() != null && !meal.getMeals().isEmpty()) {
-            MealElement mealElement = meal.getMeals().get(0);
+    public void onGetMealOfTheDay(List<MealElement> meal) {
+                    MealElement mealElement = meal.get(0);
             mealOfTheDayName.setText(mealElement.getStrMeal());
             Glide.with(requireContext())
                     .load(mealElement.getStrMealThumb())
                     .into(mealOfTheDayImage);
-        }
     }
 
     @Override
-    public void getCategories(Categories categoryList) {
-        categoriesAdapter.setCategoryList(categoryList.getCategories());
+    public void getCategories(List<Category> categoryList) {
+        categoriesAdapter.setCategoryList(categoryList);
         categoriesAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void getCountries(CountryModel countryModel) {
-        countriesAdapter.setCountryList(countryModel.getMeals());
+    public void getCountries(List<MealCountry> countryList) {
+        countriesAdapter.setCountryList(countryList);
         countriesAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void showError(String errorMsg) {
+        Log.i("Home Fragment", "showError: "+errorMsg);
+    }
+
+//    @Override
+//    public void onGetMealOfTheDay(Meal meal) {
+//        if (meal != null && meal.getMeals() != null && !meal.getMeals().isEmpty()) {
+//            MealElement mealElement = meal.getMeals().get(0);
+//            mealOfTheDayName.setText(mealElement.getStrMeal());
+//            Glide.with(requireContext())
+//                    .load(mealElement.getStrMealThumb())
+//                    .into(mealOfTheDayImage);
+//        }
+//    }
+//
+//    @Override
+//    public void getCategories(Categories categoryList) {
+//        categoriesAdapter.setCategoryList(categoryList.getCategories());
+//        categoriesAdapter.notifyDataSetChanged();
+//    }
+//
+//    @Override
+//    public void getCountries(CountryModel countryModel) {
+//        countriesAdapter.setCountryList(countryModel.getMeals());
+//        countriesAdapter.notifyDataSetChanged();
+//    }
 }
