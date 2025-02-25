@@ -149,28 +149,4 @@ public class HomeFragment extends Fragment implements HomeView, OnCategoryClickL
         NavDirections action = HomeFragmentDirections.actionHomeFragmentToCategoriesFragment(mealCountry.getStrArea());
         Navigation.findNavController(requireView()).navigate(action);
     }
-
-
-//    @Override
-//    public void onGetMealOfTheDay(Meal meal) {
-//        if (meal != null && meal.getMeals() != null && !meal.getMeals().isEmpty()) {
-//            MealElement mealElement = meal.getMeals().get(0);
-//            mealOfTheDayName.setText(mealElement.getStrMeal());
-//            Glide.with(requireContext())
-//                    .load(mealElement.getStrMealThumb())
-//                    .into(mealOfTheDayImage);
-//        }
-//    }
-//
-//    @Override
-//    public void getCategories(Categories categoryList) {
-//        categoriesAdapter.setCategoryList(categoryList.getCategories());
-//        categoriesAdapter.notifyDataSetChanged();
-//    }
-//
-//    @Override
-//    public void getCountries(CountryModel countryModel) {
-//        countriesAdapter.setCountryList(countryModel.getMeals());
-//        countriesAdapter.notifyDataSetChanged();
-//    }
 }

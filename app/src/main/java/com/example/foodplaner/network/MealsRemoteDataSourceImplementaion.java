@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.foodplaner.model.Categories;
 import com.example.foodplaner.model.CountryModel;
 import com.example.foodplaner.model.FilteredMeals;
+import com.example.foodplaner.model.Ingredients;
 import com.example.foodplaner.model.Meal;
 import com.example.foodplaner.model.MealElement;
 
@@ -40,6 +41,16 @@ public class MealsRemoteDataSourceImplementaion implements MealsRemoteDataSource
     @Override
     public Single<Categories> getCategories() {
         return mealsServices.getCategories();
+    }
+
+    @Override
+    public Single<Ingredients> getIngredients() {
+        return mealsServices.getIngredients();
+    }
+
+    @Override
+    public Single<FilteredMeals> getMealFilteredByIngredient(String ingredientName) {
+        return mealsServices.getMealFilteredByIngredient(ingredientName);
     }
 
     @Override

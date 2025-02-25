@@ -36,12 +36,22 @@ public class MealRepositoryImplementation implements MealRepository {
     }
 
     @Override
+    public Single<Ingredients> getMealsIngredients() {
+        return mealsRemoteDataSourceImplementaion.getIngredients();
+    }
+
+    @Override
     public Single<FilteredMeals> getMealsFilteredByCategories(String categoryName) {
         return mealsRemoteDataSourceImplementaion.getMealFilteredByCategory(categoryName);
     }
     @Override
     public Single<FilteredMeals> getMealsFilteredByCountry(String countryName) {
         return mealsRemoteDataSourceImplementaion.getMealFilteredByCountry(countryName);
+    }
+
+    @Override
+    public Single<FilteredMeals> getMealsFilteredByIngredients(String ingredientName) {
+        return mealsRemoteDataSourceImplementaion.getMealFilteredByIngredient(ingredientName);
     }
 
     @Override

@@ -4,6 +4,6 @@ import com.example.foodplaner.model.Category;
 import com.example.foodplaner.model.MealCountry;
 
 public interface OnCountryClickListener {
-    void onCountryClick(MealCountry category);
+    void onCountryClick(MealCountry country);
 
 }

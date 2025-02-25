@@ -71,30 +71,4 @@ public class HomePresenterImplementation implements HomePresenter {
                 );
         //mealRepository.getMealsCountries();
     }
-
-//    @Override
-//    public void onSuccessResult(List<MealElement> meals) {
-//        if (meals != null && !meals.isEmpty()) {
-//            Meal meal = new Meal();
-//            meal.setMeals(meals);
-//            homeView.onGetMealOfTheDay(meal);
-//        }
-//    }
-
-//    @Override
-//    public void onSuccessResult(Object response) {
-//        if (response instanceof Categories) {
-//            homeView.getCategories((Categories) response);
-//        } else if (response instanceof Meal) {
-//            // Pass the Meal object to the view
-//            homeView.onGetMealOfTheDay((Meal) response);
-//        } else if (response instanceof CountryModel) {
-//            homeView.getCountries((CountryModel) response);
-//        }
-//    }
-//
-//    @Override
-//    public void onFailureResult(String errorMsg) {
-//
-//    }
 }
