@@ -4,7 +4,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +43,8 @@ public class HomeFragment extends Fragment implements HomeView{
     private Meal randomMeal;
     HomePresenter homePresenter;
     CountriesAdapter countriesAdapter;
+    CardView mealCard;
+    MealElement mealElement;
 
 
 
@@ -69,6 +74,7 @@ public class HomeFragment extends Fragment implements HomeView{
         super.onViewCreated(view, savedInstanceState);
         CategoriesrecyclerView = view.findViewById(R.id.CategoriesRecyclerView);
         CategoriesrecyclerView.setHasFixedSize(true);
+        mealCard=view.findViewById(R.id.mealCard);
         countriesrecyclerView=view.findViewById(R.id.CountriesRecyclerView);
         countriesrecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
@@ -92,12 +98,21 @@ public class HomeFragment extends Fragment implements HomeView{
         homePresenter.getRandomMeal();
         homePresenter.getCategories();
         homePresenter.getCountries();
+
+        mealCard.setOnClickListener(v -> {
+            if (mealElement != null) {
+                NavController navController = Navigation.findNavController(view); // <-- Use "view" here
+                navController.navigate(
+                        HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealElement)
+                );
+            }
+        });
         //presenter.subscribeFavorites();
     }
 
     @Override
     public void onGetMealOfTheDay(List<MealElement> meal) {
-                    MealElement mealElement = meal.get(0);
+        mealElement = meal.get(0);
             mealOfTheDayName.setText(mealElement.getStrMeal());
             Glide.with(requireContext())
                     .load(mealElement.getStrMealThumb())

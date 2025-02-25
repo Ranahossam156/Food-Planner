@@ -2,162 +2,147 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@android:color/white"
+    android:focusableInTouchMode="true"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout4"
+        android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="16dp">
-
-        <TextView
-            android:id="@+id/textView18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:paddingTop="12dp"
-            android:text="Instructions"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ingredients_recycler" />
 
         <ImageView
             android:id="@+id/meal_image"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/burger"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:importantForAccessibility="no"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/burger" />
 
-        <!-- Embedded Video -->
 
         <TextView
             android:id="@+id/meal_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="77dp"
-            android:paddingTop="8dp"
-            android:text="Octopus with citrus salad herbs"
-            android:textSize="20sp"
+            android:layout_marginTop="16dp"
+            android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintEnd_toStartOf="@+id/favorite_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/meal_image" />
+            app:layout_constraintTop_toBottomOf="@id/meal_image"
+            tools:text="Octopus with citrus salad herbs" />
+
+        <ImageButton
+            android:id="@+id/favorite_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/redcalendaricon"
+            android:contentDescription="Favorite"
+            app:layout_constraintBottom_toBottomOf="@id/meal_name"
+            app:layout_constraintEnd_toStartOf="@+id/calendar_button"
+            app:layout_constraintTop_toTopOf="@id/meal_name" />
+
+        <ImageButton
+            android:id="@+id/calendar_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/redheart"
+            android:contentDescription="Add to Calendar"
+            app:layout_constraintBottom_toBottomOf="@id/meal_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/meal_name" />
 
         <TextView
             android:id="@+id/meal_country"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="321dp"
-            android:text="Egypt"
-            android:textColor="#777"
+            android:textColor="@android:color/darker_gray"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/meal_name" />
+            app:layout_constraintStart_toStartOf="@id/meal_name"
+            app:layout_constraintTop_toBottomOf="@id/meal_name"
+            tools:text="Egyptian Cuisine" />
 
         <TextView
-            android:id="@+id/textView16"
+            android:id="@+id/ingredients_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="52dp"
-            android:paddingTop="12dp"
+            android:layout_marginTop="24dp"
             android:text="Ingredients"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/meal_name" />
+            app:layout_constraintStart_toStartOf="@id/meal_name"
+            app:layout_constraintTop_toBottomOf="@+id/meal_country" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ingredients_recycler"
-            android:layout_width="48dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="44dp"
-            android:layout_marginEnd="296dp"
-            android:clipToPadding="false"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            android:overScrollMode="never"
-            android:padding="4dp"
-            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView16" />
+            app:layout_constraintTop_toBottomOf="@+id/ingredients_title" />
 
         <TextView
-            android:id="@+id/textView17"
+            android:id="@+id/instructions_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="11dp"
-            android:layout_marginEnd="9dp"
-            android:paddingTop="12dp"
-            android:text="Meal Video"
-            android:textSize="18sp"
+            android:layout_marginTop="24dp"
+            android:text="Instructions"
+            android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/meal_video"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/meal_instructions" />
+            app:layout_constraintStart_toStartOf="@id/meal_name"
+            app:layout_constraintTop_toBottomOf="@+id/ingredients_recycler" />
 
         <TextView
             android:id="@+id/meal_instructions"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="123dp"
-            android:paddingTop="4dp"
-            android:text="Step-by-step instructions go here."
+            android:layout_marginTop="8dp"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView18" />
-
-        <VideoView
-            android:id="@+id/meal_video"
-            android:layout_width="357dp"
-            android:layout_height="268dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="13dp"
-            android:layout_marginEnd="4dp"
+            android:lineSpacingMultiplier="1.2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView17" />
+            app:layout_constraintTop_toBottomOf="@+id/instructions_title"
+            tools:text="Step-by-step instructions go here..." />
 
-        <ImageView
-            android:id="@+id/imageView3"
+        <TextView
+            android:id="@+id/video_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="4dp"
-            android:src="@drawable/heart_nav_style"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/meal_image" />
+            android:layout_marginTop="24dp"
+            android:text="Cooking Video"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/meal_name"
+            app:layout_constraintTop_toBottomOf="@+id/meal_instructions" />
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/redcalendaricon"
+        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+            android:id="@+id/meal_video"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/video_title"/>
 
-        <!-- Favorite Button -->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

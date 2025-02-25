@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -27,7 +27,11 @@
         android:id="@+id/homeFragment"
         android:name="com.example.foodplaner.Features.Home.view.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.example.foodplaner.view.FavoriteFragment"
@@ -52,5 +56,9 @@
         android:id="@+id/mealDetailsFragment"
         android:name="com.example.foodplaner.view.MealDetailsFragment"
         android:label="fragment_meal_details"
-        tools:layout="@layout/fragment_meal_details" />
+        tools:layout="@layout/fragment_meal_details" >
+        <argument
+            android:name="showMealDetails"
+            app:argType="com.example.foodplaner.model.MealElement" />
+    </fragment>
 </navigation>
