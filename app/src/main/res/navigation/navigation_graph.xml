@@ -61,4 +61,14 @@
             android:name="showMealDetails"
             app:argType="com.example.foodplaner.model.MealElement" />
     </fragment>
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="com.example.foodplaner.CategoriesFragment"
+        android:label="fragment_categories"
+        tools:layout="@layout/fragment_categories" />
+    <fragment
+        android:id="@+id/countriesFragment"
+        android:name="com.example.foodplaner.CountriesFragment"
+        android:label="fragment_countries"
+        tools:layout="@layout/fragment_countries" />
 </navigation>
