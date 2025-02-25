@@ -26,7 +26,14 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ho
     private List<Category> categoryList=new ArrayList<>();
     private Context context;
     private static final String TAG = "RecyclerView";
+    private OnCategoryClickListener listener;
+
     private Handler handler = new Handler(Looper.getMainLooper());
+
+    public CategoriesAdapter(Context context, OnCategoryClickListener listener) {
+        this.context = context;
+        this.listener = listener;
+    }
 
     public CategoriesAdapter(Context context) {
         this.context = context;
@@ -48,6 +55,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ho
         Category category = categoryList.get(position);
         holder.titleTextView.setText(category.getStrCategory());
         Glide.with(context).load(category.getStrCategoryThumb()).apply(new RequestOptions().override(200,200)).into(holder.productImageView);
+        holder.itemView.setOnClickListener(v->listener.onCategoryClick(category));
     }
 
     @Override

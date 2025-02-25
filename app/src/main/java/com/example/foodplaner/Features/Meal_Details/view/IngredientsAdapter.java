@@ -1,9 +1,6 @@
-package com.example.foodplaner.view;
+package com.example.foodplaner.Features.Meal_Details.view;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.example.foodplaner.model.Category;
 import com.example.foodplaner.R;
 import com.example.foodplaner.model.IngredientItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.ViewHolder> {

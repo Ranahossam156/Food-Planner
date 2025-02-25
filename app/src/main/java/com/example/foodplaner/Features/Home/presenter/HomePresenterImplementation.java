@@ -6,8 +6,6 @@ import com.example.foodplaner.model.CountryModel;
 import com.example.foodplaner.model.Meal;
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepository;
-import com.example.foodplaner.network.NetworkCallBack;
-
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;

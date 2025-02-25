@@ -69,7 +69,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <GridView
-                android:id="@+id/gridRecyclerView"
+                android:id="@+id/categoriesgridRecyclerView"
                 android:layout_width="342dp"
                 android:layout_height="568dp"
                 android:layout_marginStart="16dp"

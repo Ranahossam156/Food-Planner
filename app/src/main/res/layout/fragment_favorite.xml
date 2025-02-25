@@ -18,7 +18,7 @@
 
 
             <GridView
-                android:id="@+id/gridRecyclerView"
+                android:id="@+id/categoriesgridRecyclerView"
                 android:layout_width="349dp"
                 android:layout_height="624dp"
                 android:layout_marginStart="16dp"
@@ -54,6 +54,7 @@
                 android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/redcalendaricon"
+                android:tint="@color/primaryColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,6 +82,7 @@
                 android:layout_marginEnd="104dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/backred"
+                android:tint="@color/primaryColor"
                 app:layout_constraintEnd_toStartOf="@+id/textView12"
                 app:layout_constraintHorizontal_bias="0.583"
                 app:layout_constraintStart_toStartOf="parent"

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.foodplaner.model.Categories;
 import com.example.foodplaner.model.CountryModel;
+import com.example.foodplaner.model.FilteredMeals;
 import com.example.foodplaner.model.Meal;
 import com.example.foodplaner.model.MealElement;
 
@@ -51,111 +52,18 @@ public class MealsRemoteDataSourceImplementaion implements MealsRemoteDataSource
         return mealsServices.getCountries();
     }
 
-//    @Override
-//    public void getCategories(NetworkCallBack networkCallback) {
-//        Retrofit retrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(BASE_URL).build();
-//        mealsServices=retrofit.create(MealsServices.class);
-//        Call<Categories> call=mealsServices.getCategories();
-//        call.enqueue(new Callback<Categories>() {
-//            @Override
-//            public void onResponse(Call<Categories> call, Response<Categories> response) {
-//                if(response.isSuccessful()){
-//                    networkCallback.onSuccessResult(response.body().getCategories());
-//                    Log.i(TAG, "onResponse: "+response.body().getCategories());
-//                   Categories categories=response.body();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Categories> call, Throwable throwable) {
-//                networkCallback.onFailureResult(throwable.getMessage());
-//                Log.i(TAG, "onFailure: "+throwable.getMessage());
-//            }
-//
-//        });
-//
-//    }
-//@Override
-//public void getCategories(NetworkCallBack networkCallback) {
-//    Call<Categories> call = mealsServices.getCategories();
-//    call.enqueue(new Callback<Categories>() {
-//        @Override
-//        public void onResponse(Call<Categories> call, Response<Categories> response) {
-//            if (response.isSuccessful()) {
-//                networkCallback.onSuccessResult(response.body());
-//                Log.i(TAG, "onResponse: " + response.body().getCategories());
-//            }
-//        }
-//
-//        @Override
-//        public void onFailure(Call<Categories> call, Throwable throwable) {
-//            networkCallback.onFailureResult(throwable.getMessage());
-//            Log.i(TAG, "onFailure: " + throwable.getMessage());
-//        }
-//    });
-//}
+    @Override
+    public Single<FilteredMeals> getMealFilteredByCategory(String categoryName) {
+        return mealsServices.getMealFilteredByCategory(categoryName);
+    }
 
-    //    @Override
-//    public void makeNetworkCall(NetworkCallBack networkcallback){
-//        Retrofit retrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(BASE_URL).build();
-//        MealsServices mealsServices=retrofit.create(MealsServices.class);
-//        Call<Products> call=productsService.getAllProducts();
-//        call.enqueue(new Callback<Products>() {
-//            @Override
-//            public void onResponse(Call<Products> call, Response<Products> response) {
-//                if(response.isSuccessful()){
-//                    networkcallback.onSuccessResult(response.body().getProducts());
-//                    Log.i(TAG, "onResponse: "+response.body().getProducts());
-//                    productList=response.body().getProducts();
-//                    Log.i("TAG", productList.toString());
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Products> call, Throwable throwable) {
-//                networkcallback.onFailureResult(throwable.getMessage());
-//                Log.i(TAG, "onFailure: "+throwable.getMessage());
-//            }
-//        });
-//    }
-//    @Override
-//    public void mealOfTheDay(NetworkCallBack networkCallback) {
-//        Call<Meal> call = mealsServices.getRandomMeal();
-//        call.enqueue(new Callback<Meal>() {
-//            @Override
-//            public void onResponse(Call<Meal> call, Response<Meal> response) {
-//                if (response.isSuccessful()) {
-//                    networkCallback.onSuccessResult(response.body());
-//                    Log.i(TAG, "onResponse: " + response.body().getMeals());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Meal> call, Throwable throwable) {
-//                networkCallback.onFailureResult(throwable.getMessage());
-//                Log.i(TAG, "onFailure: " + throwable.getMessage());
-//            }
-//        });
-//    }
-//
-//    @Override
-//    public void getMealCountries(NetworkCallBack networkCallBack) {
-//        Call<CountryModel> call = mealsServices.getCountries();
-//        call.enqueue(new Callback<CountryModel>() {
-//            @Override
-//            public void onResponse(Call<CountryModel> call, Response<CountryModel> response) {
-//                if (response.isSuccessful()) {
-//                    networkCallBack.onSuccessResult(response.body());
-//                    Log.i(TAG, "onResponse: " + response.body().getMeals());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<CountryModel> call, Throwable throwable) {
-//                networkCallBack.onFailureResult(throwable.getMessage());
-//                Log.i(TAG, "onFailure: " + throwable.getMessage());
-//            }
-//        });
-//    }
+    @Override
+    public Single<FilteredMeals> getMealFilteredByCountry(String countryName) {
+        return mealsServices.getMealFilteredByCountry(countryName);
+    }
+
+    @Override
+    public Single<Meal> getMealDetailsById(String id) {
+        return mealsServices.getMealDetailsById(id);
+    }
 }

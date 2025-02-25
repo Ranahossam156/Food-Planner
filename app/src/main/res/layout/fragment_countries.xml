@@ -18,7 +18,7 @@
 
 
             <GridView
-                android:id="@+id/gridRecyclerView"
+                android:id="@+id/categoriesgridRecyclerView"
                 android:layout_width="349dp"
                 android:layout_height="624dp"
                 android:layout_marginStart="16dp"

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_homeFragment_to_mealDetailsFragment"
             app:destination="@id/mealDetailsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_categoriesFragment"
+            app:destination="@id/SpecificMealsFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
@@ -54,7 +57,7 @@
         tools:layout="@layout/fragment_calendar" />
     <fragment
         android:id="@+id/mealDetailsFragment"
-        android:name="com.example.foodplaner.view.MealDetailsFragment"
+        android:name="com.example.foodplaner.Features.Meal_Details.view.MealDetailsFragment"
         android:label="fragment_meal_details"
         tools:layout="@layout/fragment_meal_details" >
         <argument
@@ -62,13 +65,15 @@
             app:argType="com.example.foodplaner.model.MealElement" />
     </fragment>
     <fragment
-        android:id="@+id/categoriesFragment"
-        android:name="com.example.foodplaner.CategoriesFragment"
-        android:label="fragment_categories"
-        tools:layout="@layout/fragment_categories" />
-    <fragment
-        android:id="@+id/countriesFragment"
-        android:name="com.example.foodplaner.CountriesFragment"
-        android:label="fragment_countries"
-        tools:layout="@layout/fragment_countries" />
+        android:id="@+id/SpecificMealsFragment"
+        android:name="com.example.foodplaner.Features.ShowSpecificMeals.view.SpecificMealsFragment"
+        android:label="fragment_specific_meals"
+        tools:layout="@layout/fragment_categories">
+        <argument
+            android:name="SpecificMealName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_SpecificMealsFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
 </navigation>

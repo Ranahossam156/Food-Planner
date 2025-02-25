@@ -1,4 +1,4 @@
-package com.example.foodplaner.view;
+package com.example.foodplaner.Features.Meal_Details.view;
 
 import android.os.Bundle;
 
@@ -22,7 +22,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;

@@ -8,19 +8,19 @@
     tools:context=".Features.Home.view.HomeFragment">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="160dp"
-        android:layout_height="180dp"
+        android:layout_width="240dp"
+        android:layout_height="280dp"
         android:layout_margin="5dp"
         android:layout_marginStart="7dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="12dp"
         android:backgroundTint="@color/primaryColor"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="25dp"
         app:cardElevation="8dp"
         app:cardMaxElevation="10dp"
         app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="false"
+        app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -35,7 +35,7 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/CategoryImage"
                 android:layout_width="0dp"
-                android:layout_height="120dp"
+                android:layout_height="190dp"
                 android:contentDescription="@string/app_name"
                 android:scaleType="centerCrop"
                 android:src="@drawable/burger"
@@ -47,13 +47,15 @@
 
             <TextView
                 android:id="@+id/CategoryName"
-                android:layout_width="56dp"
-                android:layout_height="26dp"
+                android:layout_width="166dp"
+                android:layout_height="45dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:text="@string/Pasta"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/CategoryImage" />
@@ -62,20 +64,15 @@
                 android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="12dp"
                 android:elevation="24dp"
+                android:tint="@color/primaryColor"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/CategoryName"
                 app:layout_constraintTop_toBottomOf="@+id/CategoryImage"
                 app:srcCompat="@drawable/redheart" />
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Egypt"
-                tools:layout_editor_absoluteX="20dp"
-                tools:layout_editor_absoluteY="154dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

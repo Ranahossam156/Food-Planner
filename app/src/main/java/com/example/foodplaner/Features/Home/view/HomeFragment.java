@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class HomeFragment extends Fragment implements HomeView{
+public class HomeFragment extends Fragment implements HomeView, OnCategoryClickListener,OnCountryClickListener{
     CategoriesAdapter categoriesAdapter;
     RecyclerView CategoriesrecyclerView,countriesrecyclerView;
     ImageView mealOfTheDayImage;
@@ -83,8 +84,8 @@ public class HomeFragment extends Fragment implements HomeView{
         countrieslayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         CategoriesrecyclerView.setLayoutManager(layoutManager);
         countriesrecyclerView.setLayoutManager(countrieslayoutManager);
-        categoriesAdapter = new CategoriesAdapter(getContext());
-        countriesAdapter=new CountriesAdapter(getContext());
+        categoriesAdapter = new CategoriesAdapter(getContext(),this);
+        countriesAdapter=new CountriesAdapter(getContext(),this);
         countriesrecyclerView.setAdapter(countriesAdapter);
         CategoriesrecyclerView.setAdapter(categoriesAdapter);
         List<Category> categories = new ArrayList<>();
@@ -101,12 +102,13 @@ public class HomeFragment extends Fragment implements HomeView{
 
         mealCard.setOnClickListener(v -> {
             if (mealElement != null) {
-                NavController navController = Navigation.findNavController(view); // <-- Use "view" here
+                NavController navController = Navigation.findNavController(view);
                 navController.navigate(
                         HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealElement)
                 );
             }
         });
+
         //presenter.subscribeFavorites();
     }
 
@@ -135,6 +137,19 @@ public class HomeFragment extends Fragment implements HomeView{
     public void showError(String errorMsg) {
         Log.i("Home Fragment", "showError: "+errorMsg);
     }
+
+    @Override
+    public void onCategoryClick(Category category) {
+        NavDirections action = HomeFragmentDirections.actionHomeFragmentToCategoriesFragment(category.getStrCategory());
+        Navigation.findNavController(requireView()).navigate(action);
+    }
+
+    @Override
+    public void onCountryClick(MealCountry mealCountry) {
+        NavDirections action = HomeFragmentDirections.actionHomeFragmentToCategoriesFragment(mealCountry.getStrArea());
+        Navigation.findNavController(requireView()).navigate(action);
+    }
+
 
 //    @Override
 //    public void onGetMealOfTheDay(Meal meal) {

@@ -27,10 +27,13 @@ public class CountriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Hom
     private List<MealCountry> countryList=new ArrayList<>();
     private Context context;
     private static final String TAG = "RecyclerView";
+    OnCountryClickListener onCountryClickListener;
     private Handler handler = new Handler(Looper.getMainLooper());
 
-    public CountriesAdapter(Context context) {
+
+    public CountriesAdapter(Context context, OnCountryClickListener onCountryClickListener) {
         this.context = context;
+        this.onCountryClickListener = onCountryClickListener;
     }
 
 
@@ -142,6 +145,8 @@ public class CountriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Hom
                 break;
 
         }
+        holder.itemView.setOnClickListener(v->onCountryClickListener.onCountryClick(mealCountry));
+
         //holder.productImageView.setImageResource(R.drawable.);
         //Glide.with(context).load(mealCountry.getStrCategoryThumb()).apply(new RequestOptions().override(200,200)).into(holder.productImageView);
     }
