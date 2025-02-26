@@ -23,11 +23,11 @@ public interface MealsServices {
     @GET("list.php?i=list")
     Single<Ingredients> getIngredients();
     @GET("filter.php")
-    Single<FilteredMeals> getMealFilteredByIngredient(@Query("i") String category);
-    @GET("filter.php")
     Single<FilteredMeals> getMealFilteredByCategory(@Query("c") String category);
     @GET("filter.php")
     Single<FilteredMeals> getMealFilteredByCountry(@Query("a") String country);
+    @GET("filter.php")
+    Single<FilteredMeals> getMealFilteredByIngredient(@Query("i") String ingredient);
     @GET("lookup.php")
     Single<Meal> getMealDetailsById(@Query("i") String mealId);
 

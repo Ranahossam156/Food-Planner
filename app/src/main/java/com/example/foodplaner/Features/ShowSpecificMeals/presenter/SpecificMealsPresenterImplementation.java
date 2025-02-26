@@ -49,6 +49,22 @@ public class SpecificMealsPresenterImplementation implements SpecificMealsPresen
     }
 
     @Override
+    public void getSpecificMealsByIngredients(String ingredientName) {
+        mealRepository.getMealsFilteredByIngredients(ingredientName).map(
+                        meal->meal.getMeals())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        meal->{
+                            specificMealsView.getSpecificMealsyIngredients(meal);
+                        },
+                        error->{
+                            specificMealsView.showError(error.getMessage());
+                        }
+                );
+    }
+
+    @Override
     public void getMealDetailsById(String id) {
         mealRepository.getMealDetailsById(id).map(
                         meal->meal.getMeals())

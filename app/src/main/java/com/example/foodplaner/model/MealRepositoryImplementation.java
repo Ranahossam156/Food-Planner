@@ -54,6 +54,7 @@ public class MealRepositoryImplementation implements MealRepository {
         return mealsRemoteDataSourceImplementaion.getMealFilteredByIngredient(ingredientName);
     }
 
+
     @Override
     public Single<Meal> getMealDetailsById(String id) {
         return mealsRemoteDataSourceImplementaion.getMealDetailsById(id);

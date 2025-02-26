@@ -60,6 +60,7 @@ public class SpecificMealsFragment extends Fragment implements SpecificMealsView
         gridView.setAdapter(categoriesGridAdapter);
         specificMealsPresenter.getSpecificMealsByCategories(filterName);
         specificMealsPresenter.getSpecificMealsByCountries(filterName);
+        specificMealsPresenter.getSpecificMealsByIngredients(filterName);
 
     }
 
@@ -75,6 +76,11 @@ public class SpecificMealsFragment extends Fragment implements SpecificMealsView
         categoriesGridAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void getSpecificMealsyIngredients(List<FilteredMeal> meal) {
+        categoriesGridAdapter.setCategoryList(meal);
+        categoriesGridAdapter.notifyDataSetChanged();
+    }
 
 
     @Override

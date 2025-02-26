@@ -91,11 +91,6 @@ public class HomeFragment extends Fragment implements HomeView, OnCategoryClickL
         List<Category> categories = new ArrayList<>();
         mealOfTheDayImage=view.findViewById(R.id.MealOfTheDayImage);
         mealOfTheDayName=view.findViewById(R.id.MealOfTheDayName);
-
-//        categories.add(new Category("Beef", "Beef Desc", "1","https://www.themealdb.com/images/category/beef.png"));
-//        categories.add(new Category("Chicken", "Chicken desc", "2","https://www.themealdb.com/images/category/chicken.png"));
-//
-//        categoriesAdapter.setCategoryList(categories);
         homePresenter.getRandomMeal();
         homePresenter.getCategories();
         homePresenter.getCountries();

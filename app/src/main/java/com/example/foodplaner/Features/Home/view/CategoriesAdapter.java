@@ -57,6 +57,16 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ho
         Glide.with(context).load(category.getStrCategoryThumb()).apply(new RequestOptions().override(200,200)).into(holder.productImageView);
         holder.itemView.setOnClickListener(v->listener.onCategoryClick(category));
     }
+    public void filterList(String query) {
+        List<Category> filteredList = new ArrayList<>();
+        for (Category category : categoryList) {
+            if (category.getStrCategory().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(category);
+            }
+        }
+        categoryList = filteredList;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {

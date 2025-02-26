@@ -8,6 +8,7 @@ import java.util.List;
 public interface SpecificMealsView {
     void getSpecificMealsByCategories(List<FilteredMeal> meal);
     void getSpecificMealsyCountries(List<FilteredMeal> meal);
+    void getSpecificMealsyIngredients(List<FilteredMeal> meal);
     void getMealDetailsByID(List<MealElement> meal);
 
     void showError(String errorMsg);

@@ -1,10 +1,13 @@
 package com.example.foodplaner.Features.Search.view;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,13 +33,17 @@ import com.google.android.material.chip.Chip;
 
 import java.util.List;
 
-public class SearchFragment extends Fragment implements SearchView, OnCategoryClickListener, OnCountryClickListener {
+import io.reactivex.rxjava3.core.Observable;
+
+public class SearchFragment extends Fragment implements SearchView, OnCategoryClickListener, OnCountryClickListener ,OnIngredientClickListener{
 
     private Chip countryChip, categoryChip, ingredientsChip;
     private RecyclerView searchRecyclerView;
     private SearchPresenter searchPresenter;
     private CategoriesAdapter categoriesAdapter;
     private CountriesAdapter countriesAdapter;
+    SearchIngrediantAdapter searchIngrediantAdapter;
+    private EditText searchEditText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,12 +54,43 @@ public class SearchFragment extends Fragment implements SearchView, OnCategoryCl
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        searchEditText = view.findViewById(R.id.searchEditText);
         initializeViews(view);
         setupRecyclerView();
         setupPresenters();
         setupChipListeners();
+        Observable.create(emitter -> {
+            TextWatcher watcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    emitter.onNext(s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            };
+
+            searchEditText.addTextChangedListener(watcher);
+        }).subscribe(query -> {
+            filterAdapter(query.toString());
+        });
+
     }
+    private void filterAdapter(String query) {
+        if (searchRecyclerView.getAdapter() instanceof CategoriesAdapter) {
+            ((CategoriesAdapter) searchRecyclerView.getAdapter()).filterList(query);
+        } else if (searchRecyclerView.getAdapter() instanceof CountriesAdapter) {
+            ((CountriesAdapter) searchRecyclerView.getAdapter()).filterList(query);
+        } else if (searchRecyclerView.getAdapter() instanceof SearchIngrediantAdapter) {
+            ((SearchIngrediantAdapter) searchRecyclerView.getAdapter()).filterList(query);
+        }
+    }
+
 
     private void initializeViews(View view) {
         categoryChip = view.findViewById(R.id.categoryChip);
@@ -68,6 +106,7 @@ public class SearchFragment extends Fragment implements SearchView, OnCategoryCl
 
         categoriesAdapter = new CategoriesAdapter(requireContext(), this);
         countriesAdapter = new CountriesAdapter(requireContext(), this);
+        searchIngrediantAdapter=new SearchIngrediantAdapter(requireContext(),this);
     }
 
     private void setupPresenters() {
@@ -87,6 +126,12 @@ public class SearchFragment extends Fragment implements SearchView, OnCategoryCl
             searchPresenter.getCountries();
             searchRecyclerView.setAdapter(countriesAdapter);
         });
+        ingredientsChip.setOnClickListener(
+                v -> {
+                    searchPresenter.getIngredients();
+                    searchRecyclerView.setAdapter(searchIngrediantAdapter);
+                }
+        );
 
     }
 
@@ -105,8 +150,8 @@ public class SearchFragment extends Fragment implements SearchView, OnCategoryCl
 
     @Override
     public void getIngredients(List<Ingredient> countryModel) {
-//        categoriesAdapter.setCategoryList(countryModel);
-//        categoriesAdapter.notifyDataSetChanged();
+        searchIngrediantAdapter.setCategoryList(countryModel);
+        searchIngrediantAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -129,4 +174,8 @@ public class SearchFragment extends Fragment implements SearchView, OnCategoryCl
         Navigation.findNavController(requireView()).navigate(action);
     }
 
+    @Override
+    public void onIngredientClick(Ingredient ingredient) {
+        navigateToCategory(ingredient.getStrIngredient());
+    }
 }

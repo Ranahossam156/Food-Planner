@@ -57,6 +57,7 @@ public class SearchPresenterImplementation implements SearchPresenter{
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         ingredients->{
+
                             searchView.getIngredients(ingredients);
                         },
                         error->{
