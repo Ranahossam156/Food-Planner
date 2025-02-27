@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
 import com.example.foodplaner.Features.Home.presenter.HomePresenter;
 import com.example.foodplaner.Features.Home.presenter.HomePresenterImplementation;
 import com.example.foodplaner.model.Categories;
@@ -57,7 +58,7 @@ public class HomeFragment extends Fragment implements HomeView, OnCategoryClickL
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        homePresenter = new HomePresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsRemoteDataSourceImplementaion.getInstance()));
+        homePresenter = new HomePresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(this.getContext()),MealsRemoteDataSourceImplementaion.getInstance()));
         homePresenter.getRandomMeal();
 
 

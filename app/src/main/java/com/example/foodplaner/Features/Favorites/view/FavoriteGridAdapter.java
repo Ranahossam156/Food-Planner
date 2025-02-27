@@ -1,4 +1,4 @@
-package com.example.foodplaner.Features.ShowSpecificMeals.view;
+package com.example.foodplaner.Features.Favorites.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,29 +9,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.foodplaner.Features.ShowSpecificMeals.view.OnFavoriteClickListener;
 import com.example.foodplaner.R;
-import com.example.foodplaner.model.FilteredMeal;
+import com.example.foodplaner.model.MealElement;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MealsGridAdapter extends BaseAdapter {
+public class FavoriteGridAdapter extends BaseAdapter {
 
     private Context context;
-    private List<FilteredMeal> categoryList = new ArrayList<>();
-    OnMealClickListener onMealClickListener;
+    private List<MealElement> categoryList = new ArrayList<>();
+    onFavoriteMealDetailsListener onMealClickListener;
     OnFavoriteClickListener onFavoriteClickListener;
+    OnRemoveClickListener onRemoveClickListener;
 
-    public MealsGridAdapter(Context context, OnMealClickListener onMealClickListener, OnFavoriteClickListener onFavoriteClickListener) {
+    public FavoriteGridAdapter(Context context, onFavoriteMealDetailsListener onMealClickListener, OnFavoriteClickListener onFavoriteClickListener,OnRemoveClickListener onRemoveClickListener) {
         this.context = context;
         this.onMealClickListener = onMealClickListener;
         this.onFavoriteClickListener = onFavoriteClickListener;
+        this.onRemoveClickListener=onRemoveClickListener;
     }
-    public MealsGridAdapter(Context context) {
+    public FavoriteGridAdapter(Context context) {
         this.context = context;
     }
 
-    public void setCategoryList(List<FilteredMeal> categoryList) {
+    public void setCategoryList(List<MealElement> categoryList) {
         this.categoryList = categoryList;
         notifyDataSetChanged();
     }
@@ -56,26 +59,26 @@ public class MealsGridAdapter extends BaseAdapter {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.favoritecard, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.fav_cal_item, parent, false);
             holder = new ViewHolder();
-            holder.categoryImage = convertView.findViewById(R.id.CategoryImage);
-            holder.categoryName = convertView.findViewById(R.id.CategoryName);
-            holder.heartImage = convertView.findViewById(R.id.imageView2);
+            holder.categoryImage = convertView.findViewById(R.id.fav_cal_Image);
+            holder.categoryName = convertView.findViewById(R.id.fav_cal_Name);
+            holder.removeImage = convertView.findViewById(R.id.removeicon);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        FilteredMeal filteredMeal = categoryList.get(position);
+        MealElement mealElement = categoryList.get(position);
 
-        holder.categoryName.setText(filteredMeal.getStrMeal());
+        holder.categoryName.setText(mealElement.getStrMeal());
         Glide.with(context)
-                .load(filteredMeal.getStrMealThumb())
+                .load(mealElement.getStrMealThumb())
                 .into(holder.categoryImage);
-        convertView.setOnClickListener(view -> onMealClickListener.onMealClick(filteredMeal.getidMeal()));
-        holder.heartImage.setOnClickListener(view -> {
-            if (onFavoriteClickListener != null) {
-                onFavoriteClickListener.onFavProductClick(filteredMeal.getidMeal());
+        convertView.setOnClickListener(view -> onMealClickListener.getClickedMealDetails(mealElement));
+        holder.removeImage.setOnClickListener(view -> {
+            if (onRemoveClickListener != null) {
+                onRemoveClickListener.onRemoveClicked(mealElement);
             }
         });
         //holder.heartImage.setOnClickListener(view -> onFavoriteClickListener.onFavProductClick(filteredMeal));
@@ -86,6 +89,6 @@ public class MealsGridAdapter extends BaseAdapter {
         ImageView categoryImage;
         TextView categoryName;
         TextView extraText;
-        ImageView heartImage;
+        ImageView removeImage;
     }
 }

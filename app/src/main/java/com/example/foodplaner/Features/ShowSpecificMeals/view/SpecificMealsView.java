@@ -12,4 +12,6 @@ public interface SpecificMealsView {
     void getMealDetailsByID(List<MealElement> meal);
 
     void showError(String errorMsg);
+
+    void showFavoriteAddedSuccess();
 }

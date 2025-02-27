@@ -1,7 +1,10 @@
 package com.example.foodplaner.Features.ShowSpecificMeals.presenter;
 
 import com.example.foodplaner.Features.ShowSpecificMeals.view.SpecificMealsView;
+import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepository;
+
+import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -79,5 +82,29 @@ public class SpecificMealsPresenterImplementation implements SpecificMealsPresen
                         }
                 );
     }
+
+    @Override
+    public void onFavoriteClick(String id) {
+        mealRepository.getMealDetailsById(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(meal -> {
+                    List<MealElement> mealElements = meal.getMeals();
+                    if (mealElements != null && !mealElements.isEmpty()) {
+                        MealElement mealElement = mealElements.get(0);
+                        mealRepository.insertMealToFavorite(mealElement)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(() -> {
+                                    specificMealsView.showFavoriteAddedSuccess();
+                                }, throwable -> {
+                                    specificMealsView.showError("Failed to add to favorites: " + throwable.getMessage());
+                                });
+                    } else {
+                        specificMealsView.showError("Meal details not found.");
+                    }
+                }, throwable -> {
+                    specificMealsView.showError("Error fetching meal details: " + throwable.getMessage());
+                });
+    }
+
 
 }

@@ -1,21 +1,28 @@
 package com.example.foodplaner.model;
 
+import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
 import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
 
+import java.util.List;
+
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class MealRepositoryImplementation implements MealRepository {
     MealsRemoteDataSourceImplementaion mealsRemoteDataSourceImplementaion;
+    MealsLocalDataSourceImplementation mealsLocalDataSourceImplementation;
     public static MealRepositoryImplementation repo=null;
 
-    public MealRepositoryImplementation(MealsRemoteDataSourceImplementaion mealsRemoteDataSourceImplementaion) {
+    public MealRepositoryImplementation(MealsLocalDataSourceImplementation mealsLocalDataSourceImplementation,MealsRemoteDataSourceImplementaion mealsRemoteDataSourceImplementaion) {
+        this.mealsLocalDataSourceImplementation=mealsLocalDataSourceImplementation;
         this.mealsRemoteDataSourceImplementaion = mealsRemoteDataSourceImplementaion;
     }
 
-    public static MealRepositoryImplementation getInstance(MealsRemoteDataSourceImplementaion mealsRemoteDataSourceImplementaion){
+    public static MealRepositoryImplementation getInstance(MealsLocalDataSourceImplementation mealsLocalDataSourceImplementation,MealsRemoteDataSourceImplementaion mealsRemoteDataSourceImplementaion){
         if (repo==null)
         {
-            repo =new MealRepositoryImplementation(mealsRemoteDataSourceImplementaion);
+            repo =new MealRepositoryImplementation(mealsLocalDataSourceImplementation,mealsRemoteDataSourceImplementaion);
         }
         return repo;
     }
@@ -58,5 +65,30 @@ public class MealRepositoryImplementation implements MealRepository {
     @Override
     public Single<Meal> getMealDetailsById(String id) {
         return mealsRemoteDataSourceImplementaion.getMealDetailsById(id);
+    }
+
+    @Override
+    public Completable insertMealToFavorite(MealElement mealElement) {
+        return mealsLocalDataSourceImplementation.insertMealToFavorite(mealElement);
+    }
+
+    @Override
+    public Single<List<MealElement>> getAllFavouriteMeals() {
+        return mealsLocalDataSourceImplementation.getAllFavouriteMeals();
+    }
+
+    @Override
+    public Single<List<MealElement>> getAllMealsFromPlan() {
+        return mealsLocalDataSourceImplementation.getAllPlannedMeals();
+    }
+
+    @Override
+    public Completable removeMealFromFavorite(MealElement mealElement) {
+        return mealsLocalDataSourceImplementation.deleteMealFromFavorite(mealElement);
+    }
+
+    @Override
+    public Completable removeAllFavoriteMeals() {
+        return mealsLocalDataSourceImplementation.removeAllData();
     }
 }

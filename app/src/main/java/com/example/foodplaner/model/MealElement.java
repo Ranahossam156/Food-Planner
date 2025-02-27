@@ -1,7 +1,11 @@
 package com.example.foodplaner.model;
 
-import java.io.Serializable;
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+@Entity(tableName ="favorite_meals_table")
 public class MealElement implements Serializable {
     private String strIngredient10;
     private String strIngredient12;
@@ -16,6 +20,14 @@ public class MealElement implements Serializable {
     private String strArea;
     private String strIngredient19;
     private String strTags;
+
+
+    public void setIdMeal(@NonNull String idMeal) {
+        this.idMeal = idMeal;
+    }
+
+    @PrimaryKey
+    @NonNull
     private String idMeal;
     private String strInstructions;
     private String strIngredient1;
@@ -52,6 +64,10 @@ public class MealElement implements Serializable {
     private String strMeasure17;
     private String strMeasure14;
     private String strMeasure15;
+
+    public String getIdMeal() {
+        return idMeal;
+    }
 
     public String getStrIngredient10() { return strIngredient10; }
     public void setStrIngredient10(String value) { this.strIngredient10 = value; }

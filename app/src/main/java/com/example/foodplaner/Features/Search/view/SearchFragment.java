@@ -17,6 +17,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
 import com.example.foodplaner.Features.Home.view.CategoriesAdapter;
 import com.example.foodplaner.Features.Home.view.CountriesAdapter;
 import com.example.foodplaner.Features.Home.view.OnCategoryClickListener;
@@ -112,7 +113,7 @@ public class SearchFragment extends Fragment implements SearchView, OnCategoryCl
     private void setupPresenters() {
         searchPresenter = new SearchPresenterImplementation(
                 this,
-                MealRepositoryImplementation.getInstance(MealsRemoteDataSourceImplementaion.getInstance())
+                MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()),MealsRemoteDataSourceImplementaion.getInstance())
         );
     }
 

@@ -1,5 +1,8 @@
 package com.example.foodplaner.model;
 
+import java.util.List;
+
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public interface MealRepository {
@@ -11,5 +14,13 @@ public interface MealRepository {
     Single<FilteredMeals> getMealsFilteredByCountry(String countryName);
     Single<FilteredMeals> getMealsFilteredByIngredients(String ingredientName);
     Single<Meal> getMealDetailsById(String id);
+    public Completable insertMealToFavorite(MealElement mealElement);
+
+    public Single<List<MealElement>> getAllFavouriteMeals();
+    public Single<List<MealElement>> getAllMealsFromPlan();
+
+    public Completable removeMealFromFavorite(MealElement mealElement);
+    public Completable removeAllFavoriteMeals();
+
 
 }

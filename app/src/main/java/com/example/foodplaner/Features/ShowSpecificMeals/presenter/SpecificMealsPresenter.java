@@ -5,5 +5,6 @@ public interface SpecificMealsPresenter {
     void getSpecificMealsByCountries(String countryName);
     void getSpecificMealsByIngredients(String ingredientName);
     void getMealDetailsById(String id);
+    void onFavoriteClick(String id);
 
 }

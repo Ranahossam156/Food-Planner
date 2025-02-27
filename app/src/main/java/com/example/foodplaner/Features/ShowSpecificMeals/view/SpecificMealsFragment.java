@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.Toast;
 
+import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
 import com.example.foodplaner.Features.Home.view.HomeFragmentDirections;
 import com.example.foodplaner.Features.ShowSpecificMeals.presenter.SpecificMealsPresenterImplementation;
 import com.example.foodplaner.Features.ShowSpecificMeals.presenter.SpecificMealsPresenter;
@@ -25,7 +27,7 @@ import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
 
 import java.util.List;
 
-public class SpecificMealsFragment extends Fragment implements SpecificMealsView, OnMealClickListener {
+public class SpecificMealsFragment extends Fragment implements SpecificMealsView, OnMealClickListener,OnFavoriteClickListener {
     SpecificMealsPresenter specificMealsPresenter;
     String filterName;
     MealsGridAdapter categoriesGridAdapter;
@@ -38,7 +40,6 @@ public class SpecificMealsFragment extends Fragment implements SpecificMealsView
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        specificMealsPresenter =new SpecificMealsPresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsRemoteDataSourceImplementaion.getInstance()));
         if (getArguments() != null) {
             SpecificMealsFragmentArgs args = SpecificMealsFragmentArgs.fromBundle(getArguments());
             filterName = args.getSpecificMealName();
@@ -56,8 +57,9 @@ public class SpecificMealsFragment extends Fragment implements SpecificMealsView
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         GridView gridView = view.findViewById(R.id.categoriesgridRecyclerView);
-        categoriesGridAdapter = new MealsGridAdapter(getContext(),this);
+        categoriesGridAdapter = new MealsGridAdapter(getContext(),this,this);
         gridView.setAdapter(categoriesGridAdapter);
+        specificMealsPresenter =new SpecificMealsPresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()),MealsRemoteDataSourceImplementaion.getInstance()));
         specificMealsPresenter.getSpecificMealsByCategories(filterName);
         specificMealsPresenter.getSpecificMealsByCountries(filterName);
         specificMealsPresenter.getSpecificMealsByIngredients(filterName);
@@ -88,6 +90,9 @@ public class SpecificMealsFragment extends Fragment implements SpecificMealsView
 
     }
 
+    @Override
+    public void showFavoriteAddedSuccess() {
+    }
 
 
     @Override
@@ -103,5 +108,13 @@ public class SpecificMealsFragment extends Fragment implements SpecificMealsView
                     .actionSpecificMealsFragmentToMealDetailsFragment(mealElement);
             Navigation.findNavController(requireView()).navigate(action);
         }
+    }
+
+    @Override
+    public void onFavProductClick(String id) {
+        specificMealsPresenter.onFavoriteClick(id);
+        Toast.makeText(getContext(), "AddedSuccessfully", Toast.LENGTH_SHORT).show();
+        // specificMealsPresenter.getMealDetailsById(id);
+
     }
 }

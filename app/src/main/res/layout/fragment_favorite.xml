@@ -18,21 +18,23 @@
 
 
             <GridView
-                android:id="@+id/categoriesgridRecyclerView"
+                android:id="@+id/favoritegridRecyclerView"
                 android:layout_width="349dp"
                 android:layout_height="624dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="64dp"
                 android:gravity="center"
-                android:numColumns="2"
+                android:numColumns="1"
                 android:scrollbars="none"
+                tools:listitem="@layout/fav_cal_item"
                 android:verticalSpacing="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
+                app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -54,9 +56,9 @@
                 android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/redcalendaricon"
-                android:tint="@color/primaryColor"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/primaryColor" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -82,11 +84,11 @@
                 android:layout_marginEnd="104dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/backred"
-                android:tint="@color/primaryColor"
                 app:layout_constraintEnd_toStartOf="@+id/textView12"
                 app:layout_constraintHorizontal_bias="0.583"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/primaryColor" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
