@@ -47,8 +47,8 @@
 
             <TextView
                 android:id="@+id/CategoryName"
-                android:layout_width="166dp"
-                android:layout_height="45dp"
+                android:layout_width="116dp"
+                android:layout_height="37dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:ellipsize="end"
@@ -62,17 +62,28 @@
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="28dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
                 android:elevation="24dp"
-                android:tint="@color/primaryColor"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/CategoryName"
                 app:layout_constraintTop_toBottomOf="@+id/CategoryImage"
-                app:srcCompat="@drawable/redheart" />
+                app:srcCompat="@drawable/redheart"
+                app:tint="@color/primaryColor" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="33dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="1dp"
+                android:src="@drawable/redcalendaricon"
+                app:layout_constraintEnd_toStartOf="@+id/imageView2"
+                app:layout_constraintTop_toBottomOf="@+id/CategoryImage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

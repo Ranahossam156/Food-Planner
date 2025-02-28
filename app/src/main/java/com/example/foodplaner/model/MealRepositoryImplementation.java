@@ -77,10 +77,6 @@ public class MealRepositoryImplementation implements MealRepository {
         return mealsLocalDataSourceImplementation.getAllFavouriteMeals();
     }
 
-    @Override
-    public Single<List<MealElement>> getAllMealsFromPlan() {
-        return mealsLocalDataSourceImplementation.getAllPlannedMeals();
-    }
 
     @Override
     public Completable removeMealFromFavorite(MealElement mealElement) {
@@ -90,5 +86,24 @@ public class MealRepositoryImplementation implements MealRepository {
     @Override
     public Completable removeAllFavoriteMeals() {
         return mealsLocalDataSourceImplementation.removeAllData();
+    }
+    @Override
+    public Single<List<PlannedMeal>> getAllPlannedMeals() {
+        return mealsLocalDataSourceImplementation.getAllPlannedMeals();
+    }
+
+    @Override
+    public Completable insertPlannedMeal(PlannedMeal plannedMeal) {
+        return mealsLocalDataSourceImplementation.insertPlannedMeal(plannedMeal);
+    }
+
+    @Override
+    public Completable removePlannedMeal(PlannedMeal plannedMeal) {
+        return mealsLocalDataSourceImplementation.deletePlannedMeal(plannedMeal);
+    }
+
+    @Override
+    public Completable removeAllPlannedMeals() {
+        return mealsLocalDataSourceImplementation.removeAllPlannedMeals();
     }
 }

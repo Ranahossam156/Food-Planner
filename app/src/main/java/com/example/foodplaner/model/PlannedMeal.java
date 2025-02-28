@@ -3,10 +3,10 @@ package com.example.foodplaner.model;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+@Entity(tableName ="planned_meals_table")
 
-import java.io.Serializable;
-@Entity(tableName ="favorite_meals_table")
-public class MealElement implements Serializable {
+public class PlannedMeal {
+    private String dayOfWeek;
     private String strIngredient10;
     private String strIngredient12;
     private String strIngredient11;
@@ -21,7 +21,8 @@ public class MealElement implements Serializable {
     private String strIngredient19;
     private String strTags;
 
-    public MealElement(String strIngredient10, String strIngredient12, String strIngredient11, String strIngredient14, String strCategory, String strIngredient13, String strIngredient16, String strIngredient15, String strIngredient18, String strIngredient17, String strArea, String strIngredient19, String strTags, @NonNull String idMeal, String strInstructions, String strIngredient1, String strIngredient3, String strIngredient2, String strIngredient20, String strIngredient5, String strIngredient4, String strIngredient7, String strIngredient6, String strIngredient9, String strIngredient8, String strMealThumb, String strMeasure20, String strYoutube, String strMeal, String strMeasure12, String strMeasure13, String strMeasure10, String strMeasure11, String strSource, String strMeasure9, String strMeasure7, String strMeasure8, String strMeasure5, String strMeasure6, String strMeasure3, String strMeasure4, String strMeasure1, String strMeasure18, String strMeasure2, String strMeasure19, String strMeasure16, String strMeasure17, String strMeasure14, String strMeasure15) {
+    public PlannedMeal(String dayOfWeek, String strIngredient10, String strIngredient12, String strIngredient11, String strIngredient14, String strCategory, String strIngredient13, String strIngredient16, String strIngredient15, String strIngredient18, String strIngredient17, String strArea, String strIngredient19, String strTags, @NonNull String idMeal, String strInstructions, String strIngredient1, String strIngredient3, String strIngredient2, String strIngredient20, String strIngredient5, String strIngredient4, String strIngredient7, String strIngredient6, String strIngredient9, String strIngredient8, String strMealThumb, String strMeasure20, String strYoutube, String strMeal, String strMeasure12, String strMeasure13, String strMeasure10, String strMeasure11, String strSource, String strMeasure9, String strMeasure7, String strMeasure8, String strMeasure5, String strMeasure6, String strMeasure3, String strMeasure4, String strMeasure1, String strMeasure18, String strMeasure2, String strMeasure19, String strMeasure16, String strMeasure17, String strMeasure14, String strMeasure15) {
+        this.dayOfWeek = dayOfWeek;
         this.strIngredient10 = strIngredient10;
         this.strIngredient12 = strIngredient12;
         this.strIngredient11 = strIngredient11;
@@ -267,5 +268,12 @@ public class MealElement implements Serializable {
 
     public String getStrMeasure15() { return strMeasure15; }
     public void setStrMeasure15(String value) { this.strMeasure15 = value; }
-}
 
+    public String getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+}

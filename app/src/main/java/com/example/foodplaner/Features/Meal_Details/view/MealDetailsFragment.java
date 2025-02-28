@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,11 +14,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
+import com.example.foodplaner.Features.Meal_Details.presenter.MealDetailsPresenter;
+import com.example.foodplaner.Features.Meal_Details.presenter.MealDetailsPresenterImplementation;
 import com.example.foodplaner.R;
 import com.example.foodplaner.model.IngredientItem;
 import com.example.foodplaner.model.MealElement;
+import com.example.foodplaner.model.MealRepositoryImplementation;
+import com.example.foodplaner.model.PlannedMeal;
+import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -26,50 +34,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MealDetailsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MealDetailsFragment extends Fragment {
+public class MealDetailsFragment extends Fragment implements MealDetailsView{
     private YouTubePlayerView youTubePlayerView;
     private String youtubeVideoId = "";
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    ImageView planImage;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private MealElement meal;
     ImageView mealImage;
     TextView mealName;
     TextView mealCountry;
     TextView instructions;
+    MealDetailsPresenter mealDetailsPresenter;
 
     public MealDetailsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MealDetailsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MealDetailsFragment newInstance(String param1, String param2) {
-        MealDetailsFragment fragment = new MealDetailsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,14 +74,21 @@ public class MealDetailsFragment extends Fragment {
          mealName = view.findViewById(R.id.meal_name);
          mealCountry = view.findViewById(R.id.meal_country);
         instructions=view.findViewById(R.id.meal_instructions);
+        planImage=view.findViewById(R.id.plan_icon);
         mealName.setText(meal.getStrMeal());
         mealCountry.setText(meal.getStrArea());
         instructions.setText(meal.getStrInstructions());
         Glide.with(this).load(meal.getStrMealThumb()).into(mealImage);
         setupIngredientsRecyclerView(meal);
+        mealDetailsPresenter=new MealDetailsPresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()), MealsRemoteDataSourceImplementaion.getInstance()));
         youTubePlayerView = view.findViewById(R.id.meal_video);
         getLifecycle().addObserver(youTubePlayerView);
-
+        planImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDayPickerDialog();
+            }
+        });
         String youtubeUrl = meal.getStrYoutube();
         if(youtubeUrl != null && !youtubeUrl.isEmpty()) {
             youtubeVideoId = extractYoutubeId(youtubeUrl);
@@ -112,6 +99,7 @@ public class MealDetailsFragment extends Fragment {
             bottomNav.setVisibility(View.GONE);
 
     }
+
     private void setupYouTubePlayer() {
         youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
@@ -186,5 +174,57 @@ public class MealDetailsFragment extends Fragment {
 
         ingredientsRecycler.setAdapter(adapter);
         ingredientsRecycler.setHasFixedSize(true);
+    }
+    private void showDayPickerDialog() {
+        final String[] days = {
+                "Saturday",
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday"
+        };
+
+        final int[] selectedItem = {-1};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+        builder.setTitle("Choose any day you want");
+
+        builder.setSingleChoiceItems(days, selectedItem[0], (dialog, which) -> {
+            selectedItem[0] = which;
+        });
+
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            if (selectedItem[0] >= 0) {
+                String chosenDay = days[selectedItem[0]];
+                PlannedMeal plannedMeal=new PlannedMeal(chosenDay,meal.getStrIngredient10(), meal.getStrIngredient12(), meal.getStrIngredient11(),meal.getStrIngredient14(),meal.getStrCategory(),meal.getStrIngredient13(),meal.getStrIngredient16(),meal.getStrIngredient15(),meal.getStrIngredient18(),meal.getStrIngredient17(),meal.getStrArea(),meal.getStrIngredient19(),meal.getStrTags(),meal.getIdMeal(),meal.getStrInstructions(),meal.getStrIngredient1(),meal.getStrIngredient3(),meal.getStrIngredient2(),meal.getStrIngredient20(),meal.getStrIngredient5(),meal.getStrIngredient4(),meal.getStrIngredient7(),meal.getStrIngredient6(),meal.getStrIngredient9(),meal.getStrIngredient8(),meal.getStrMealThumb(),meal.getStrMeasure20(),meal.getStrYoutube(),meal.getStrMeal(),meal.getStrMeasure12(),meal.getStrMeasure13(),meal.getStrMeasure10(),meal.getStrMeasure11(),meal.getStrSource(),meal.getStrMeasure9(),meal.getStrMeasure7(),meal.getStrMeasure8(),meal.getStrMeasure5(),meal.getStrMeasure6(),meal.getStrMeasure3(),meal.getStrMeasure4(),meal.getStrMeasure1(),meal.getStrMeasure18(),meal.getStrMeasure2(),meal.getStrMeasure19(),meal.getStrMeasure16(),meal.getStrMeasure17(),meal.getStrMeasure14(),meal.getStrMeasure15());
+                mealDetailsPresenter.OnPlanClicked(plannedMeal);
+                Toast.makeText(this.getContext(), "Selected: " + chosenDay, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this.getContext(), "No day selected", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("CANCEL", (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        builder.create().show();
+    }
+
+    @Override
+    public void onFavoriteClick() {
+
+    }
+
+    @Override
+    public void onPlanClick() {
+
+    }
+
+    @Override
+    public void showError(String errorMsg) {
+
     }
 }

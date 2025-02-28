@@ -16,7 +16,7 @@
         android:icon="@drawable/search_nav_style"
         android:title="search" />
     <item
-        android:id="@+id/calendarFragment"
+        android:id="@+id/planFragment"
         android:icon="@drawable/calendar_nav_style"
         android:title="Favorites" />
 

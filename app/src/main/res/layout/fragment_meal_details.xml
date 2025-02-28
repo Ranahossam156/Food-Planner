@@ -46,16 +46,16 @@
             tools:text="Octopus with citrus salad herbs" />
 
         <ImageButton
-            android:id="@+id/favorite_button"
+            android:id="@+id/plan_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Favorite"
             android:src="@drawable/redcalendaricon"
-            android:tint="@color/primaryColor"
             app:layout_constraintBottom_toBottomOf="@id/meal_name"
             app:layout_constraintEnd_toStartOf="@+id/calendar_button"
-            app:layout_constraintTop_toTopOf="@id/meal_name" />
+            app:layout_constraintTop_toTopOf="@id/meal_name"
+            app:tint="@color/primaryColor" />
 
         <ImageButton
             android:id="@+id/calendar_button"
@@ -65,10 +65,10 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Add to Calendar"
             android:src="@drawable/redheart"
-            android:tint="@color/primaryColor"
             app:layout_constraintBottom_toBottomOf="@id/meal_name"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/meal_name" />
+            app:layout_constraintTop_toTopOf="@id/meal_name"
+            app:tint="@color/primaryColor" />
 
         <TextView
             android:id="@+id/meal_country"

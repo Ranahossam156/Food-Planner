@@ -17,10 +17,13 @@ public interface MealRepository {
     public Completable insertMealToFavorite(MealElement mealElement);
 
     public Single<List<MealElement>> getAllFavouriteMeals();
-    public Single<List<MealElement>> getAllMealsFromPlan();
 
     public Completable removeMealFromFavorite(MealElement mealElement);
     public Completable removeAllFavoriteMeals();
+    Single<List<PlannedMeal>> getAllPlannedMeals();
+    Completable insertPlannedMeal(PlannedMeal plannedMeal);
+    Completable removePlannedMeal(PlannedMeal plannedMeal);
+    Completable removeAllPlannedMeals();
 
 
 }

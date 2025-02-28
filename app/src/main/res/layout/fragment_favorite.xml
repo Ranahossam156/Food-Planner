@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".Features.Search.view.SearchFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,13 +30,13 @@
                 android:gravity="center"
                 android:numColumns="1"
                 android:scrollbars="none"
-                tools:listitem="@layout/fav_cal_item"
                 android:verticalSpacing="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+                app:layout_constraintTop_toBottomOf="@+id/textView11"
+                tools:listitem="@layout/fav_cal_item" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -68,7 +70,7 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="249dp"
                 android:text="My Favorites"
-                android:textColor="#000000"
+                android:textColor="@color/primaryColor"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
