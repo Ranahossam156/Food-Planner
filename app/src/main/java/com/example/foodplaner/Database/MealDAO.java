@@ -11,7 +11,6 @@ import com.example.foodplaner.model.MealElement;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 @Dao
 public interface MealDAO {
@@ -25,5 +24,8 @@ public interface MealDAO {
     Completable deleteMealFromFavorites(MealElement meal);
 
     @Query("DELETE FROM favorite_meals_table")
-    Completable removeAllMeals();
+    Completable removeAllFavoriteMeals();
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    Completable insertAllFavorites(List<MealElement> meals);
 }

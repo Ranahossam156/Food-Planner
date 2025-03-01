@@ -160,8 +160,6 @@ public class MealElement implements Serializable {
     public String getStrTags() { return strTags; }
     public void setStrTags(String value) { this.strTags = value; }
 
-    public String getidMeal() { return idMeal; }
-    public void setidMeal(String value) { this.idMeal = value; }
 
     public String getStrInstructions() { return strInstructions; }
     public void setStrInstructions(String value) { this.strInstructions = value; }

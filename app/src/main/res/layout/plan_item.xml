@@ -5,41 +5,43 @@
     android:id="@+id/planRow"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     android:orientation="vertical"
     android:padding="12dp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_marginVertical="8dp"
+        android:background="@color/primaryColor"
+        android:backgroundTint="@color/primaryColor"
         app:cardCornerRadius="16dp"
         app:cardElevation="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/primaryColor"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginLeft="50dp"
                 android:layout_marginRight="12dp"
                 android:src="@drawable/calendar_nav_style"
-                app:tint="@color/primaryColor" />
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/dayTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="179dp"
+                android:layout_height="31dp"
+                android:layout_marginTop="4dp"
                 android:text="Day Name"
-                android:textColor="@color/primaryColor"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textColor="@color/white"
+                android:textSize="16sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

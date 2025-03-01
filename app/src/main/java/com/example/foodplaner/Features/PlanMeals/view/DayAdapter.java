@@ -1,4 +1,4 @@
-package com.example.foodplaner.Features.Plan_Meals.view;
+package com.example.foodplaner.Features.PlanMeals.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,7 +62,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
         }
 
         void bind(DayItem dayItem) {
-            String header = dayItem.getDayName() + "\n(" + dayItem.getFormattedDate() + ")";
+            String header = dayItem.getDayName();
             dayTextView.setText(header);
 
             if (dayItem.getMeals().isEmpty()) {

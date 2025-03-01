@@ -26,4 +26,9 @@ public interface MealRepository {
     Completable removeAllPlannedMeals();
 
 
+    Completable insertAllFavorites(List<MealElement> favorites);
+    Completable insertAllPlannedMeals(List<PlannedMeal> plannedMeals);
+
+
+
 }

@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,8 +42,8 @@ public class SearchFragment extends Fragment implements SearchView, OnCategoryCl
     private Chip countryChip, categoryChip, ingredientsChip;
     private RecyclerView searchRecyclerView;
     private SearchPresenter searchPresenter;
-    private CategoriesAdapter categoriesAdapter;
-    private CountriesAdapter countriesAdapter;
+    private SearchCategoriesAdapter categoriesAdapter;
+    private SearchCountriesAdapter countriesAdapter;
     SearchIngrediantAdapter searchIngrediantAdapter;
     private EditText searchEditText;
 
@@ -101,12 +102,12 @@ public class SearchFragment extends Fragment implements SearchView, OnCategoryCl
     }
 
     private void setupRecyclerView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         searchRecyclerView.setLayoutManager(layoutManager);
 
-        categoriesAdapter = new CategoriesAdapter(requireContext(), this);
-        countriesAdapter = new CountriesAdapter(requireContext(), this);
+        categoriesAdapter = new SearchCategoriesAdapter(requireContext(), this);
+        countriesAdapter = new SearchCountriesAdapter(requireContext(), this);
         searchIngrediantAdapter=new SearchIngrediantAdapter(requireContext(),this);
     }
 

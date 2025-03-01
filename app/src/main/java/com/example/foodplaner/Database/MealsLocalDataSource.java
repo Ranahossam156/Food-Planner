@@ -21,4 +21,8 @@ public interface MealsLocalDataSource {
     Completable insertPlannedMeal(PlannedMeal plannedMeal);
     Completable deletePlannedMeal(PlannedMeal plannedMeal);
     Completable removeAllPlannedMeals();
+
+
+    Completable insertAllFavorites(List<MealElement> meals);
+    Completable insertAllPlannedMeals(List<PlannedMeal> meals);
 }

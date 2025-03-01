@@ -50,7 +50,7 @@ public class MealsLocalDataSourceImplementation implements MealsLocalDataSource 
 
     @Override
     public Completable removeAllData() {
-        return mealDAO.removeAllMeals();
+        return mealDAO.removeAllFavoriteMeals();
     }
     @Override
     public Single<List<PlannedMeal>> getAllPlannedMeals() {
@@ -76,4 +76,14 @@ public class MealsLocalDataSourceImplementation implements MealsLocalDataSource 
                 .subscribeOn(Schedulers.io());
     }
 
+
+    @Override
+    public Completable insertAllFavorites(List<MealElement> meals) {
+        return mealDAO.insertAllFavorites(meals).subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Completable insertAllPlannedMeals(List<PlannedMeal> meals) {
+        return planDAO.insertAllPlannedMeals(meals).subscribeOn(Schedulers.io());
+    }
 }

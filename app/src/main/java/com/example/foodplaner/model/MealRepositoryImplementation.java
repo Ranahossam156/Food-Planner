@@ -106,4 +106,16 @@ public class MealRepositoryImplementation implements MealRepository {
     public Completable removeAllPlannedMeals() {
         return mealsLocalDataSourceImplementation.removeAllPlannedMeals();
     }
+
+
+
+    @Override
+    public Completable insertAllFavorites(List<MealElement> favorites) {
+        return mealsLocalDataSourceImplementation.insertAllFavorites(favorites);
+    }
+
+    @Override
+    public Completable insertAllPlannedMeals(List<PlannedMeal> plannedMeals) {
+        return mealsLocalDataSourceImplementation.insertAllPlannedMeals(plannedMeals);
+    }
 }

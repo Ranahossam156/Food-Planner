@@ -40,7 +40,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView{
     ImageView planImage;
 
     private MealElement meal;
-    ImageView mealImage;
+    ImageView mealImage,heart;
     TextView mealName;
     TextView mealCountry;
     TextView instructions;
@@ -75,6 +75,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView{
          mealCountry = view.findViewById(R.id.meal_country);
         instructions=view.findViewById(R.id.meal_instructions);
         planImage=view.findViewById(R.id.plan_icon);
+        heart=view.findViewById(R.id.heart_icon);
         mealName.setText(meal.getStrMeal());
         mealCountry.setText(meal.getStrArea());
         instructions.setText(meal.getStrInstructions());
@@ -87,16 +88,22 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView{
             @Override
             public void onClick(View view) {
                 showDayPickerDialog();
+                Toast.makeText(getContext(), "Plan Added Successfully", Toast.LENGTH_SHORT).show();
             }
         });
         String youtubeUrl = meal.getStrYoutube();
         if(youtubeUrl != null && !youtubeUrl.isEmpty()) {
             youtubeVideoId = extractYoutubeId(youtubeUrl);
         }
+        heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mealDetailsPresenter.OnFavoriteClicked(meal.getIdMeal());
+                heart.setImageResource(R.drawable.redheartfilled);
+            }
+        });
 
         setupYouTubePlayer();
-                View bottomNav = getActivity().findViewById(R.id.bottomNavigationView);
-            bottomNav.setVisibility(View.GONE);
 
     }
 
@@ -214,8 +221,8 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView{
     }
 
     @Override
-    public void onFavoriteClick() {
-
+    public void onFavoriteClick(String id) {
+        mealDetailsPresenter.OnFavoriteClicked(id);
     }
 
     @Override
@@ -225,6 +232,11 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView{
 
     @Override
     public void showError(String errorMsg) {
+
+    }
+
+    @Override
+    public void showFavoriteAddedSuccess() {
 
     }
 }

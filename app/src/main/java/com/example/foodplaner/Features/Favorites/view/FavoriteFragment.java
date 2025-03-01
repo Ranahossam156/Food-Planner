@@ -19,6 +19,7 @@ import com.example.foodplaner.Features.Favorites.presenter.FavoritePresenter;
 import com.example.foodplaner.Features.Favorites.presenter.FavoritePresenterImplementation;
 import com.example.foodplaner.Features.ShowSpecificMeals.view.OnFavoriteClickListener;
 import com.example.foodplaner.R;
+import com.example.foodplaner.Utils.DialogUtils;
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepositoryImplementation;
 import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
@@ -70,7 +71,12 @@ public class FavoriteFragment extends Fragment implements FavoriteView , onFavor
 
     @Override
     public void onRemoveClicked(MealElement mealElement) {
-        favoritePresenter.onFavoriteRemoved(mealElement);
+        showRemoveConfirmationDialog(mealElement);
         Toast.makeText(this.getContext(), "Removed", Toast.LENGTH_SHORT).show();
+    }
+    private void showRemoveConfirmationDialog(MealElement mealElement) {
+        DialogUtils.showConfirmationDialog(requireContext(),
+                "Are you sure you want to remove this item?",
+                (dialog, which) -> favoritePresenter.onFavoriteRemoved(mealElement));
     }
 }

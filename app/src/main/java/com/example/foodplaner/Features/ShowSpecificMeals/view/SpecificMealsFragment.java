@@ -114,7 +114,6 @@ public class SpecificMealsFragment extends Fragment implements SpecificMealsView
     public void onFavProductClick(String id) {
         specificMealsPresenter.onFavoriteClick(id);
         Toast.makeText(getContext(), "AddedSuccessfully", Toast.LENGTH_SHORT).show();
-        // specificMealsPresenter.getMealDetailsById(id);
 
     }
 }

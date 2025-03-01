@@ -8,8 +8,8 @@
     tools:context=".Features.Home.view.HomeFragment">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="240dp"
-        android:layout_height="280dp"
+        android:layout_width="260dp"
+        android:layout_height="300dp"
         android:layout_margin="5dp"
         android:layout_marginStart="7dp"
         android:layout_marginTop="5dp"
@@ -35,7 +35,7 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/CategoryImage"
                 android:layout_width="0dp"
-                android:layout_height="190dp"
+                android:layout_height="210dp"
                 android:contentDescription="@string/app_name"
                 android:scaleType="centerCrop"
                 android:src="@drawable/burger"
@@ -47,8 +47,8 @@
 
             <TextView
                 android:id="@+id/CategoryName"
-                android:layout_width="116dp"
-                android:layout_height="37dp"
+                android:layout_width="168dp"
+                android:layout_height="41dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:ellipsize="end"
@@ -74,16 +74,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/CategoryImage"
                 app:srcCompat="@drawable/redheart"
                 app:tint="@color/primaryColor" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="33dp"
-                android:layout_height="29dp"
-                android:layout_marginTop="13dp"
-                android:layout_marginEnd="1dp"
-                android:src="@drawable/redcalendaricon"
-                app:layout_constraintEnd_toStartOf="@+id/imageView2"
-                app:layout_constraintTop_toBottomOf="@+id/CategoryImage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

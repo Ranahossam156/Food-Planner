@@ -75,10 +75,12 @@ public class MealsGridAdapter extends BaseAdapter {
         convertView.setOnClickListener(view -> onMealClickListener.onMealClick(filteredMeal.getidMeal()));
         holder.heartImage.setOnClickListener(view -> {
             if (onFavoriteClickListener != null) {
+
                 onFavoriteClickListener.onFavProductClick(filteredMeal.getidMeal());
+                holder.heartImage.setImageResource(R.drawable.redheartfilled);
+
             }
         });
-        //holder.heartImage.setOnClickListener(view -> onFavoriteClickListener.onFavProductClick(filteredMeal));
         return convertView;
     }
 

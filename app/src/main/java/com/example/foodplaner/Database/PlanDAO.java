@@ -28,4 +28,7 @@ public interface PlanDAO {
 
     @Query("DELETE FROM planned_meals_table")
     Completable deleteAllRecords();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Completable insertAllPlannedMeals(List<PlannedMeal> meals);
 }

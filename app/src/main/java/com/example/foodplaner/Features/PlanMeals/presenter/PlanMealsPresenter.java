@@ -1,6 +1,5 @@
-package com.example.foodplaner.Features.Plan_Meals.presenter;
+package com.example.foodplaner.Features.PlanMeals.presenter;
 
-import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.PlannedMeal;
 
 public interface PlanMealsPresenter {

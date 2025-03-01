@@ -62,16 +62,16 @@
 
             <ImageView
                 android:id="@+id/removeicon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="31dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="12dp"
                 android:elevation="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/fav_cal_Name"
                 app:layout_constraintTop_toBottomOf="@+id/fav_cal_Image"
-                app:srcCompat="@drawable/iconsdelete"
+                app:srcCompat="@drawable/baseline_delete_24"
                 app:tint="@color/primaryColor" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

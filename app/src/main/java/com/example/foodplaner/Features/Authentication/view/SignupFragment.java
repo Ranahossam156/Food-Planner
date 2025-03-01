@@ -7,6 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.util.Patterns;
@@ -20,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.foodplaner.Features.Home.view.HomeFragment;
+import com.example.foodplaner.Features.Home.view.HomeFragmentDirections;
 import com.example.foodplaner.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -93,8 +99,8 @@ public class SignupFragment extends Fragment {
             }
         });
         AlreadyHaveAnAccount=view.findViewById(R.id.AlreadyHaveAnAccountBtn);
-        progressBar=view.findViewById(R.id.progressBar);
-        progressBar.setVisibility(view.GONE);
+//        progressBar=view.findViewById(R.id.progressBar);
+//        progressBar.setVisibility(view.GONE);
         auth=FirebaseAuth.getInstance();
 
         signupButton.setOnClickListener(new View.OnClickListener() {
@@ -133,10 +139,11 @@ public class SignupFragment extends Fragment {
         AlreadyHaveAnAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragmentContainerView, new SigninFragment());
-                transaction.addToBackStack(null);
-                transaction.commit();
+                NavDirections action = SignupFragmentDirections.actionLoginFragmentToSigninFragment();
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setPopUpTo(R.id.loginFragment, true)
+                        .build();
+                Navigation.findNavController(requireView()).navigate(action, navOptions);
             }
         });
     }
@@ -176,10 +183,12 @@ public class SignupFragment extends Fragment {
                 });
     }
     private void navigateToHome() {
-        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainerView, new HomeFragment());
-        transaction.addToBackStack(null);
-        transaction.commit();
+        NavOptions navOptions = new NavOptions.Builder()
+                .setPopUpTo(R.id.loginFragment, true) // Clear back stack including SigninFragment
+                .build();
+
+        NavDirections action = SignupFragmentDirections.actionLoginFragmentToHomeFragment();
+        Navigation.findNavController(requireView()).navigate(action, navOptions);
     }
 
     private boolean validateEmail() {

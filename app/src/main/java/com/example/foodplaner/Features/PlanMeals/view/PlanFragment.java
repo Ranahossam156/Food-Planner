@@ -1,4 +1,4 @@
-package com.example.foodplaner.Features.Plan_Meals.view;
+package com.example.foodplaner.Features.PlanMeals.view;
 
 import android.os.Bundle;
 
@@ -15,10 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
-import com.example.foodplaner.Features.Favorites.view.FavoriteFragmentDirections;
-import com.example.foodplaner.Features.Plan_Meals.presenter.PlanMealsPresenter;
-import com.example.foodplaner.Features.Plan_Meals.presenter.PlannedMealPresenterImplementation;
+import com.example.foodplaner.Features.PlanMeals.presenter.PlanMealsPresenter;
+import com.example.foodplaner.Features.PlanMeals.presenter.PlannedMealPresenterImplementation;
 import com.example.foodplaner.R;
+import com.example.foodplaner.Utils.DialogUtils;
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepository;
 import com.example.foodplaner.model.MealRepositoryImplementation;
@@ -32,12 +32,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.SingleObserver;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class PlanFragment extends Fragment implements OnPlannedMealClicked, OnPlannedMealRemoved,PlannedView{
     private RecyclerView daysRecyclerView;
@@ -117,9 +111,13 @@ public class PlanFragment extends Fragment implements OnPlannedMealClicked, OnPl
 
     @Override
     public void onMealRemoved(PlannedMeal meal) {
-        planMealsPresenter.onPlannedeRemoved(meal);
+        showRemoveConfirmationDialog(meal);
     }
-
+    private void showRemoveConfirmationDialog(PlannedMeal plannedMeal) {
+        DialogUtils.showConfirmationDialog(requireContext(),
+                "Are you sure you want to remove this item?",
+                (dialog, which) -> planMealsPresenter.onPlannedeRemoved(plannedMeal));
+    }
     @Override
     public void getPlanned(List<PlannedMeal> meals) {
         if (meals.isEmpty()) {
@@ -131,4 +129,5 @@ public class PlanFragment extends Fragment implements OnPlannedMealClicked, OnPl
             adapter.updateData(weekPlan);
         }
     }
+
 }

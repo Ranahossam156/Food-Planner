@@ -1,12 +1,10 @@
-package com.example.foodplaner.Features.Plan_Meals.presenter;
+package com.example.foodplaner.Features.PlanMeals.presenter;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.foodplaner.Features.Favorites.view.FavoriteView;
-import com.example.foodplaner.Features.Plan_Meals.view.PlannedView;
-import com.example.foodplaner.model.MealElement;
+import com.example.foodplaner.Features.PlanMeals.view.PlannedView;
 import com.example.foodplaner.model.MealRepository;
 import com.example.foodplaner.model.PlannedMeal;
 

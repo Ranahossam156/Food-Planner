@@ -62,11 +62,13 @@ dependencies {
     implementation("com.squareup.retrofit2:adapter-rxjava3:2.9.0")
     implementation("androidx.room:room-rxjava3:2.6.1")
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    implementation("com.airbnb.android:lottie:6.0.0")
 
 
     implementation(libs.firebase.ui.auth)
 
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
     annotationProcessor ("androidx.room:room-compiler:2.6.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

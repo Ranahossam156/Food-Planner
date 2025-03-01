@@ -1,5 +1,7 @@
 package com.example.foodplaner.Features.Authentication.view;
 
+import static androidx.navigation.fragment.FragmentKt.findNavController;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -7,6 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,8 +25,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.foodplaner.Features.Home.view.HomeFragment;
+import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
+import com.example.foodplaner.Features.Authentication.presenter.AuthPresenter;
+import com.example.foodplaner.AuthPresenterImplementation;
 import com.example.foodplaner.R;
+import com.example.foodplaner.model.MealRepository;
+import com.example.foodplaner.model.MealRepositoryImplementation;
+import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -28,7 +40,11 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SigninFragment extends Fragment {
 
@@ -43,7 +59,14 @@ public class SigninFragment extends Fragment {
     public SigninFragment() {
         // Required empty public constructor
     }
-
+    // Add this to your LoginFragment to check auth state
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+//            navigateToHome();
+//        }
+//    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,16 +93,14 @@ public class SigninFragment extends Fragment {
         passwordEditText = view.findViewById(R.id.PasswordTextFieldlogin);
         signInButton = view.findViewById(R.id.signinButton);
         doNotHaveAnAccount = view.findViewById(R.id.doNotHaveAnAccount);
-        progressBar = view.findViewById(R.id.progressBar2);
+//        progressBar = view.findViewById(R.id.progressBar2);
         googleSignIn = view.findViewById(R.id.googleButtonLogin);
-        progressBar.setVisibility(View.GONE);
+//        progressBar.setVisibility(View.GONE);
         auth=FirebaseAuth.getInstance();
 
         doNotHaveAnAccount.setOnClickListener(view1 -> {
-            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragmentContainerView, new SignupFragment());
-            transaction.addToBackStack(null);
-            transaction.commit();
+            Navigation.findNavController(requireView())
+                    .navigate(SigninFragmentDirections.actionSigninFragmentToLoginFragment());
         });
 
         signInButton.setOnClickListener(view12 -> signInWithEmail());
@@ -97,6 +118,29 @@ public class SigninFragment extends Fragment {
                     .addOnCompleteListener(task -> {
                         progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            if (user != null) {
+                                AuthPresenter firestoreHelper = new AuthPresenterImplementation(user.getUid());
+                                MealRepository mealRepository= MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(this.getContext()), MealsRemoteDataSourceImplementaion.getInstance());
+
+                                firestoreHelper.downloadFavorites()
+                                        .flatMapCompletable(favorites ->
+                                                mealRepository.removeAllFavoriteMeals()
+                                                        .andThen(mealRepository.insertAllFavorites(favorites))
+                                        )
+                                        .andThen(firestoreHelper.downloadPlannedMeals())
+                                        .flatMapCompletable(plannedMeals ->
+                                                mealRepository.removeAllPlannedMeals()
+                                                        .andThen(mealRepository.insertAllPlannedMeals(plannedMeals))
+                                        )
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(() -> {
+                                            // Proceed to Main Activity
+                                        }, error -> {
+                                            // Handle Error
+                                        });
+                            }
                             navigateToHome();
                         } else {
                             Log.w("TAG", "signInWithEmail:failure", task.getException());
@@ -133,6 +177,29 @@ public class SigninFragment extends Fragment {
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (user != null) {
+                            AuthPresenter firestoreHelper = new AuthPresenterImplementation(user.getUid());
+                            MealRepository mealRepository= MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(this.getContext()), MealsRemoteDataSourceImplementaion.getInstance());
+
+                            firestoreHelper.downloadFavorites()
+                                    .flatMapCompletable(favorites ->
+                                            mealRepository.removeAllFavoriteMeals()
+                                                    .andThen(mealRepository.insertAllFavorites(favorites))
+                                    )
+                                    .andThen(firestoreHelper.downloadPlannedMeals())
+                                    .flatMapCompletable(plannedMeals ->
+                                            mealRepository.removeAllPlannedMeals()
+                                                    .andThen(mealRepository.insertAllPlannedMeals(plannedMeals))
+                                    )
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(() -> {
+                                        // Proceed to Main Activity
+                                    }, error -> {
+                                        // Handle Error
+                                    });
+                        }
                         Log.d("TAG", "signInWithCredential:success");
                         navigateToHome();
                     } else {
@@ -141,13 +208,43 @@ public class SigninFragment extends Fragment {
                     }
                 });
     }
-
     private void navigateToHome() {
-        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainerView, new HomeFragment());
-        transaction.addToBackStack(null);
-        transaction.commit();
+        NavOptions navOptions = new NavOptions.Builder()
+                .setPopUpTo(R.id.signinFragment, true) // Clear back stack including SigninFragment
+                .build();
+
+        NavDirections action = SigninFragmentDirections.actionSigninFragmentToHomeFragment();
+        Navigation.findNavController(requireView()).navigate(action, navOptions);
     }
+//    private void navigateToHome() {
+//        NavOptions navOptions = new NavOptions.Builder()
+//                .setPopUpTo(R.id.signinFragment, true) // Clear up to and including SigninFragment
+//                .build();
+//
+//        // Navigate to HomeFragment with the options
+//        NavDirections action = SigninFragmentDirections.actionSigninFragmentToHomeFragment();
+//        Navigation.findNavController(requireView()).navigate(action, navOptions);
+//        //Navigation.findNavController(view).navigate(R.id.action_fragment1_to_fragment2);        Navigation.findNavController(requireView()).navigate(SigninFragmentDirections.actionSigninFragmentToHomeFragment());
+//            // Create NavOptions to clear the authentication fragments from the back stack.
+////        NavOptions navOptions = new NavOptions.Builder()
+////                .setPopUpTo(R.id.navigation_graph, true) // Or use the ID of your start destination (e.g., R.id.signinFragment) if that fits your flow
+////                .build();
+////        NavDirections action = SigninFragmentDirections.actionSigninFragmentToHomeFragment();
+////        Navigation.findNavController(requireView()).navigate(action, navOptions);
+//
+////        AuthPresenterImplementation authPresenter = new AuthPresenterImplementation(getContext());
+////        authPresenter.restoreData()
+////                .subscribeOn(Schedulers.io())
+////                .observeOn(AndroidSchedulers.mainThread())
+////                .subscribe(() -> {
+////                    NavDirections action = SigninFragmentDirections.actionSigninFragmentToHomeFragment();
+////                    NavController navController = NavHostFragment.findNavController(SigninFragment.this);
+////
+////                    navController.navigate(action);
+////                }, error -> {
+////                    Log.e("RestoreData", "Error restoring backup data", error);
+////                });
+//    }
 
     private boolean validateEmail() {
         String emailInput = emailEditText.getText().toString().trim();
