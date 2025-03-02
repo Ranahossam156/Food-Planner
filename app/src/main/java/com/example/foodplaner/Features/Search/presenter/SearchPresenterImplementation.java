@@ -46,7 +46,6 @@ public class SearchPresenterImplementation implements SearchPresenter{
                             searchView.showError(error.getMessage());
                         }
                 );
-        //mealRepository.getMealsCountries();
     }
 
     @Override

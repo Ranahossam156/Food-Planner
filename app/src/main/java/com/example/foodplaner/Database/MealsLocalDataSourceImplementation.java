@@ -7,6 +7,7 @@ import com.example.foodplaner.model.PlannedMeal;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -50,7 +51,8 @@ public class MealsLocalDataSourceImplementation implements MealsLocalDataSource 
 
     @Override
     public Completable removeAllData() {
-        return mealDAO.removeAllFavoriteMeals();
+        return mealDAO.removeAllFavoriteMeals().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
     @Override
     public Single<List<PlannedMeal>> getAllPlannedMeals() {
@@ -73,8 +75,8 @@ public class MealsLocalDataSourceImplementation implements MealsLocalDataSource 
     @Override
     public Completable removeAllPlannedMeals() {
         return planDAO.deleteAllRecords()
-                .subscribeOn(Schedulers.io());
-    }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());    }
 
 
     @Override

@@ -2,7 +2,9 @@ package com.example.foodplaner.model;
 
 import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
 import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
@@ -118,4 +120,54 @@ public class MealRepositoryImplementation implements MealRepository {
     public Completable insertAllPlannedMeals(List<PlannedMeal> plannedMeals) {
         return mealsLocalDataSourceImplementation.insertAllPlannedMeals(plannedMeals);
     }
+public Completable backupDataToFirestore(String userId, FirebaseFirestore firestore) {
+    return Single.zip(
+            getAllFavouriteMeals(),
+            getAllPlannedMeals(),
+            (favorites, planned) -> {
+                UserBackup backup = new UserBackup();
+                backup.setFavorites(favorites);
+                backup.setPlannedMeals(planned);
+                return backup;
+            }
+    ).flatMapCompletable(backup ->
+            Completable.create(emitter -> {
+                firestore.collection("users")
+                        .document(userId)
+                        .set(backup)
+                        .addOnSuccessListener(__ -> {
+                            // After backup, delete local data:
+                            removeAllFavoriteMeals()
+                                    .andThen(removeAllPlannedMeals())
+                                    .subscribe(emitter::onComplete, emitter::onError);
+                        })
+                        .addOnFailureListener(emitter::onError);
+            })
+    );
+}
+public Completable restoreDataFromFirestore(String userId, FirebaseFirestore firestore) {
+    return Completable.create(emitter -> {
+        firestore.collection("users")
+                .document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        UserBackup backup = documentSnapshot.toObject(UserBackup.class);
+                        if (backup != null) {
+                            Completable.mergeArray(
+                                    insertAllFavorites(backup.getFavorites()),
+                                    insertAllPlannedMeals(backup.getPlannedMeals())
+                            ).subscribe(emitter::onComplete, emitter::onError);
+                        } else {
+                            emitter.onError(new Exception("Invalid backup format"));
+                        }
+                    } else {
+                        emitter.onComplete();
+                    }
+                })
+                .addOnFailureListener(emitter::onError);
+    });
+}
+
+
 }

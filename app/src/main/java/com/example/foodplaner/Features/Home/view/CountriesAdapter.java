@@ -146,13 +146,10 @@ public class CountriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Hom
 
         }
         holder.itemView.setOnClickListener(v->onCountryClickListener.onCountryClick(mealCountry));
-
-        //holder.productImageView.setImageResource(R.drawable.);
-        //Glide.with(context).load(mealCountry.getStrCategoryThumb()).apply(new RequestOptions().override(200,200)).into(holder.productImageView);
     }
     public void filterList(String query) {
         List<MealCountry> filteredList = new ArrayList<>();
-        for (MealCountry mealCountry : countryList) { // originalList is your backup list of all categories
+        for (MealCountry mealCountry : countryList) {
             if (mealCountry.getStrArea().toLowerCase().contains(query.toLowerCase())) {
                 filteredList.add(mealCountry);
             }

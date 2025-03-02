@@ -144,8 +144,6 @@ public class SearchCountriesAdapter extends RecyclerView.Adapter<SearchCategorie
         }
         holder.itemView.setOnClickListener(v->onCountryClickListener.onCountryClick(mealCountry));
 
-        //holder.productImageView.setImageResource(R.drawable.);
-        //Glide.with(context).load(mealCountry.getStrCategoryThumb()).apply(new RequestOptions().override(200,200)).into(holder.productImageView);
     }
     public void filterList(String query) {
         List<MealCountry> filteredList = new ArrayList<>();

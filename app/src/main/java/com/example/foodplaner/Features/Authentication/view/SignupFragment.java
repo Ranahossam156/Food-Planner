@@ -64,13 +64,7 @@ public class SignupFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
 
-        googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSignInOptions);
-        auth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -83,10 +77,13 @@ public class SignupFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        View bottomNav = getActivity().findViewById(R.id.bottomNavigationView);
-//        if (bottomNav != null) {
-//            bottomNav.setVisibility(View.GONE);
-//        }
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSignInOptions);
+        auth = FirebaseAuth.getInstance();
         emailEditText =view.findViewById(R.id.emailTextFieldSignup);
         passwordEditText =view.findViewById(R.id.PasswordTextFieldSignup);
         repeatPasswordEditText =view.findViewById(R.id.RepeatPasswordTextFieldSignup);
@@ -99,8 +96,6 @@ public class SignupFragment extends Fragment {
             }
         });
         AlreadyHaveAnAccount=view.findViewById(R.id.AlreadyHaveAnAccountBtn);
-//        progressBar=view.findViewById(R.id.progressBar);
-//        progressBar.setVisibility(view.GONE);
         auth=FirebaseAuth.getInstance();
 
         signupButton.setOnClickListener(new View.OnClickListener() {
@@ -111,25 +106,20 @@ public class SignupFragment extends Fragment {
                 password=String.valueOf(passwordEditText.getText());
                 if(isFieldsValid())
                 {
-                    progressBar.setVisibility(view.VISIBLE);
                     auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    progressBar.setVisibility(view.GONE);
                                     if (task.isSuccessful()) {
                                         Log.d("TAG", "createUserWithEmail:success");
                                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                                         transaction.replace(R.id.fragmentContainerView, new SigninFragment());
                                         transaction.addToBackStack(null);
                                         transaction.commit();
-//                                        FirebaseUser user = auth.getCurrentUser();
-//                                        updateUI(user);
                                     } else {
                                         Log.w("TAG", "createUserWithEmail:failure", task.getException());
                                         Toast.makeText(getContext(), "Authentication failed.",
                                                 Toast.LENGTH_SHORT).show();
-                                        //updateUI(null);
                                     }
                                 }
                             });
@@ -140,17 +130,16 @@ public class SignupFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 NavDirections action = SignupFragmentDirections.actionLoginFragmentToSigninFragment();
-                NavOptions navOptions = new NavOptions.Builder()
-                        .setPopUpTo(R.id.loginFragment, true)
-                        .build();
-                Navigation.findNavController(requireView()).navigate(action, navOptions);
+                Navigation.findNavController(requireView()).navigate(action);
             }
         });
     }
 
     private void signInWithGoogle() {
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        googleSignInClient.signOut().addOnCompleteListener(task -> {
+            Intent signInIntent = googleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        });
     }
 
     @Override

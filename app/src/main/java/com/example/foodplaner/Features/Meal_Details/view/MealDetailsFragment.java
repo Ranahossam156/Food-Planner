@@ -1,11 +1,14 @@
 package com.example.foodplaner.Features.Meal_Details.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +24,7 @@ import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
 import com.example.foodplaner.Features.Meal_Details.presenter.MealDetailsPresenter;
 import com.example.foodplaner.Features.Meal_Details.presenter.MealDetailsPresenterImplementation;
 import com.example.foodplaner.R;
+import com.example.foodplaner.Utils.DialogUtils;
 import com.example.foodplaner.model.IngredientItem;
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepositoryImplementation;
@@ -84,24 +88,33 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView{
         mealDetailsPresenter=new MealDetailsPresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()), MealsRemoteDataSourceImplementaion.getInstance()));
         youTubePlayerView = view.findViewById(R.id.meal_video);
         getLifecycle().addObserver(youTubePlayerView);
+        SharedPreferences sharedPrefs =  requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        boolean isGuest = sharedPrefs.getBoolean("isGuest", false);
+
+        if (isGuest) {
+            disableRestrictedFeatures();
+        }
+        else{
+            heart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mealDetailsPresenter.OnFavoriteClicked(meal.getIdMeal());
+                    heart.setImageResource(R.drawable.redheartfilled);
+                    Toast.makeText(getContext(), "Added to favorite", Toast.LENGTH_SHORT).show();
+                }
+            });
         planImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDayPickerDialog();
                 Toast.makeText(getContext(), "Plan Added Successfully", Toast.LENGTH_SHORT).show();
             }
-        });
+        });}
         String youtubeUrl = meal.getStrYoutube();
         if(youtubeUrl != null && !youtubeUrl.isEmpty()) {
             youtubeVideoId = extractYoutubeId(youtubeUrl);
         }
-        heart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mealDetailsPresenter.OnFavoriteClicked(meal.getIdMeal());
-                heart.setImageResource(R.drawable.redheartfilled);
-            }
-        });
+
 
         setupYouTubePlayer();
 
@@ -130,6 +143,30 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView{
         }
         return videoId;
     }
+    private void disableRestrictedFeatures() {
+        heart.setAlpha(0.5f);
+        heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogUtils.showConfirmationDialog(requireContext(),
+                        "To Add to favorites you must signin",
+                        (dialog, which) -> Navigation.findNavController(requireView())
+                                .navigate(MealDetailsFragmentDirections.actionMealDetailsFragmentToSigninFragment()));
+            }
+        });
+
+        planImage.setAlpha(0.5f);
+        planImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogUtils.showConfirmationDialog(requireContext(),
+                        "To Add to favorites you must signin",
+                        (dialog, which) -> Navigation.findNavController(requireView())
+                        .navigate(MealDetailsFragmentDirections.actionMealDetailsFragmentToSigninFragment()));
+            }
+        });
+    }
+
     private List<IngredientItem> parseIngredients(MealElement meal) {
         List<IngredientItem> ingredients = new ArrayList<>();
         String baseImageUrl = "https://www.themealdb.com/images/ingredients/";

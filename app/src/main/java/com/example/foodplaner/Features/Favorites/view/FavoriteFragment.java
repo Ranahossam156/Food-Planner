@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
@@ -29,6 +30,7 @@ import java.util.List;
 public class FavoriteFragment extends Fragment implements FavoriteView , onFavoriteMealDetailsListener, OnFavoriteClickListener,OnRemoveClickListener {
     FavoritePresenter favoritePresenter;
     FavoriteGridAdapter favoriteGridAdapter;
+    ImageView back;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,14 @@ public class FavoriteFragment extends Fragment implements FavoriteView , onFavor
         favoriteGridAdapter = new FavoriteGridAdapter(getContext(),this,this,this);
         gridView.setAdapter(favoriteGridAdapter);
         favoritePresenter.getFavoriteMeals();
+      //  back=view.findViewById(R.id.back);
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Navigation.findNavController(view).navigateUp();
+//
+//            }
+//        });
     }
 
     @Override

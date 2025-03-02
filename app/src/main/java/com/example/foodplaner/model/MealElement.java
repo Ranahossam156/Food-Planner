@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 @Entity(tableName ="favorite_meals_table")
 public class MealElement implements Serializable {
+    public MealElement(){}
     private String strIngredient10;
     private String strIngredient12;
     private String strIngredient11;

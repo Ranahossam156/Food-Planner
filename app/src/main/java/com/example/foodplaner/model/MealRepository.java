@@ -1,5 +1,7 @@
 package com.example.foodplaner.model;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
@@ -28,7 +30,9 @@ public interface MealRepository {
 
     Completable insertAllFavorites(List<MealElement> favorites);
     Completable insertAllPlannedMeals(List<PlannedMeal> plannedMeals);
+    public Completable backupDataToFirestore(String userId, FirebaseFirestore firestore);
+    public Completable restoreDataFromFirestore(String userId, FirebaseFirestore firestore) ;
 
 
 
-}
+    }

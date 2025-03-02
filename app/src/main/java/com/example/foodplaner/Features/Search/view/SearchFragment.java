@@ -84,10 +84,10 @@ public class SearchFragment extends Fragment implements SearchView, OnCategoryCl
 
     }
     private void filterAdapter(String query) {
-        if (searchRecyclerView.getAdapter() instanceof CategoriesAdapter) {
-            ((CategoriesAdapter) searchRecyclerView.getAdapter()).filterList(query);
-        } else if (searchRecyclerView.getAdapter() instanceof CountriesAdapter) {
-            ((CountriesAdapter) searchRecyclerView.getAdapter()).filterList(query);
+        if (searchRecyclerView.getAdapter() instanceof SearchCategoriesAdapter) {
+            ((SearchCategoriesAdapter) searchRecyclerView.getAdapter()).filterList(query);
+        } else if (searchRecyclerView.getAdapter() instanceof SearchCountriesAdapter) {
+            ((SearchCountriesAdapter) searchRecyclerView.getAdapter()).filterList(query);
         } else if (searchRecyclerView.getAdapter() instanceof SearchIngrediantAdapter) {
             ((SearchIngrediantAdapter) searchRecyclerView.getAdapter()).filterList(query);
         }
@@ -172,7 +172,7 @@ public class SearchFragment extends Fragment implements SearchView, OnCategoryCl
     }
 
     private void navigateToCategory(String filter) {
-        NavDirections action = SearchFragmentDirections.actionSearchFragmentToSpecificMealsFragment(filter);
+        NavDirections action = SearchFragmentDirections.actionSearchFragmentToSearchAfterFilterFragment(filter);
         Navigation.findNavController(requireView()).navigate(action);
     }
 

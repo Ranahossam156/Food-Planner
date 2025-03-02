@@ -1,6 +1,9 @@
 package com.example.foodplaner.Features.ShowSpecificMeals.view;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +11,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.navigation.Navigation;
+
 import com.bumptech.glide.Glide;
+import com.example.foodplaner.Features.Meal_Details.view.MealDetailsFragmentDirections;
 import com.example.foodplaner.R;
+import com.example.foodplaner.Utils.DialogUtils;
+import com.example.foodplaner.model.Category;
 import com.example.foodplaner.model.FilteredMeal;
 
 import java.util.ArrayList;
@@ -50,6 +58,16 @@ public class MealsGridAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+    public void filterList(String query) {
+        List<FilteredMeal> filteredList = new ArrayList<>();
+        for (FilteredMeal category : categoryList) {
+            if (category.getStrMeal().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(category);
+            }
+        }
+        categoryList = filteredList;
+        notifyDataSetChanged();
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -73,6 +91,21 @@ public class MealsGridAdapter extends BaseAdapter {
                 .load(filteredMeal.getStrMealThumb())
                 .into(holder.categoryImage);
         convertView.setOnClickListener(view -> onMealClickListener.onMealClick(filteredMeal.getidMeal()));
+        SharedPreferences sharedPrefs =  context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        boolean isGuest = sharedPrefs.getBoolean("isGuest", false);
+        if(isGuest)
+        {
+            holder.heartImage.setAlpha(0.5f);
+            holder.heartImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogUtils.showConfirmationDialog(context,
+                            "To Add to favorites you must signin",
+                            (dialog, which) -> Navigation.findNavController(v)
+                                    .navigate(MealDetailsFragmentDirections.actionMealDetailsFragmentToSigninFragment()));
+                }
+            });
+        }else{
         holder.heartImage.setOnClickListener(view -> {
             if (onFavoriteClickListener != null) {
 
@@ -80,7 +113,7 @@ public class MealsGridAdapter extends BaseAdapter {
                 holder.heartImage.setImageResource(R.drawable.redheartfilled);
 
             }
-        });
+        });}
         return convertView;
     }
 

@@ -52,6 +52,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:ellipsize="end"
+                android:fontFamily="@font/adamina"
                 android:maxLines="2"
                 android:text="@string/Pasta"
                 android:textColor="@color/black"

@@ -11,14 +11,9 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public interface AuthPresenter {
-//     Completable backupFavorites();
-   //  Completable  backupPlannedMeals();
-//    public Completable logoutAndBackupAndClear(Context context);
-//     public Completable restorePlannedMeals();
-//    public Completable restoreFavorites();
-//    public Completable restoreData();
-    public Completable uploadFavorites(List<MealElement> favorites);
     public Single<List<MealElement>> downloadFavorites();
     public Single<List<PlannedMeal>> downloadPlannedMeals();
-    public Completable uploadPlannedMeals(List<PlannedMeal> plannedMeals);
+//    public Completable uploadPlannedMeals(List<PlannedMeal> plannedMeals);
+    public void backupDataOnLogout(String userId);
+    public void restoreDataOnLogin(String userId);
 }

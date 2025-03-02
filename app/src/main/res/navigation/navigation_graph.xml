@@ -21,13 +21,17 @@
         android:id="@+id/signinFragment"
         android:name="com.example.foodplaner.Features.Authentication.view.SigninFragment"
         android:label="fragment_signin"
-        tools:layout="@layout/fragment_signin" >
+        tools:layout="@layout/fragment_signin"
+        >
         <action
             android:id="@+id/action_signinFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
             android:id="@+id/action_signinFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/signinFragment"
+            app:popUpToInclusive="true"
+            />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -43,6 +47,15 @@
         <action
             android:id="@+id/action_homeFragment_to_signinFragment"
             app:destination="@id/signinFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_signinFragment2"
+            app:destination="@id/signinFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_signinFragment3"
+            app:destination="@id/signinFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
@@ -52,6 +65,9 @@
         <action
             android:id="@+id/action_favoriteFragment_to_mealDetailsFragment"
             app:destination="@id/mealDetailsFragment" />
+        <action
+            android:id="@+id/action_favoriteFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -61,6 +77,21 @@
         <action
             android:id="@+id/action_searchFragment_to_SpecificMealsFragment"
             app:destination="@id/SpecificMealsFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_searchAfterFilterFragment"
+            app:destination="@id/searchAfterFilterFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_searchAfterFilterFragment2"
+            app:destination="@id/searchAfterFilterFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_planFragment"
+            app:destination="@id/planFragment" />
     </fragment>
     <fragment
         android:id="@+id/mealDetailsFragment"
@@ -70,6 +101,27 @@
         <argument
             android:name="showMealDetails"
             app:argType="com.example.foodplaner.model.MealElement" />
+        <action
+            android:id="@+id/action_mealDetailsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_mealDetailsFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
+        <action
+            android:id="@+id/action_mealDetailsFragment_to_planFragment"
+            app:destination="@id/planFragment" />
+        <action
+            android:id="@+id/action_mealDetailsFragment_to_searchAfterFilterFragment"
+            app:destination="@id/searchAfterFilterFragment" />
+        <action
+            android:id="@+id/action_mealDetailsFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_mealDetailsFragment_to_signinFragment"
+            app:destination="@id/signinFragment" />
+        <action
+            android:id="@+id/action_mealDetailsFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/SpecificMealsFragment"
@@ -82,6 +134,24 @@
         <action
             android:id="@+id/action_SpecificMealsFragment_to_mealDetailsFragment"
             app:destination="@id/mealDetailsFragment" />
+        <action
+            android:id="@+id/action_SpecificMealsFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
+        <action
+            android:id="@+id/action_SpecificMealsFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_SpecificMealsFragment_to_searchFragment2"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_SpecificMealsFragment_to_planFragment"
+            app:destination="@id/planFragment" />
+        <action
+            android:id="@+id/action_SpecificMealsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_SpecificMealsFragment_self"
+            app:destination="@id/SpecificMealsFragment" />
     </fragment>
     <fragment
         android:id="@+id/planFragment"
@@ -91,10 +161,22 @@
         <action
             android:id="@+id/action_planFragment_to_mealDetailsFragment"
             app:destination="@id/mealDetailsFragment" />
+        <action
+            android:id="@+id/action_planFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_planFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_planFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
+        <action
+            android:id="@+id/action_planFragment_to_homeFragment2"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.foodplaner.SplashFragment"
+        android:name="com.example.foodplaner.Features.Splash.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action
@@ -106,5 +188,47 @@
         <action
             android:id="@+id/action_splashFragment_to_signinFragment2"
             app:destination="@id/signinFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_authFragment"
+            app:destination="@id/authFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchAfterFilterFragment"
+        android:name="com.example.foodplaner.Features.Search.view.SearchAfterFilterFragment"
+        android:label="fragment_search_after_filter"
+        tools:layout="@layout/fragment_search_after_filter" >
+        <action
+            android:id="@+id/action_searchAfterFilterFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+        <argument
+            android:name="filter"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_searchAfterFilterFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
+        <action
+            android:id="@+id/action_searchAfterFilterFragment_self"
+            app:destination="@id/searchAfterFilterFragment" />
+        <action
+            android:id="@+id/action_searchAfterFilterFragment_to_planFragment"
+            app:destination="@id/planFragment" />
+        <action
+            android:id="@+id/action_searchAfterFilterFragment_to_splashFragment"
+            app:destination="@id/splashFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.example.foodplaner.Features.Authentication.view.AuthFragment"
+        android:label="fragment_auth"
+        tools:layout="@layout/fragment_auth" >
+        <action
+            android:id="@+id/action_authFragment_to_signinFragment"
+            app:destination="@id/signinFragment" />
+        <action
+            android:id="@+id/action_authFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_authFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

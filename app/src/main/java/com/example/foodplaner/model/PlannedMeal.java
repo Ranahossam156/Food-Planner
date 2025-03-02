@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName ="planned_meals_table")
 
 public class PlannedMeal {
+    public PlannedMeal(){}
     private String dayOfWeek;
     private String strIngredient10;
     private String strIngredient12;

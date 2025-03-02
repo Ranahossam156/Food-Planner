@@ -3,6 +3,7 @@ package com.example.foodplaner.Features.Home.presenter;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.foodplaner.Features.Authentication.view.AuthView;
 import com.example.foodplaner.Features.Home.view.HomeView;
 import com.example.foodplaner.model.Categories;
 import com.example.foodplaner.model.CountryModel;
@@ -20,7 +21,7 @@ import java.util.Locale;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class HomePresenterImplementation implements HomePresenter {
+public class HomePresenterImplementation implements HomePresenter, AuthView {
     HomeView homeView;
     MealRepository mealRepository;
 
@@ -101,5 +102,25 @@ public class HomePresenterImplementation implements HomePresenter {
                             homeView.showError(error.getMessage());
                         }
                 );
+    }
+
+    @Override
+    public void onBackupSuccess() {
+
+    }
+
+    @Override
+    public void onRestoreSuccess() {
+
+    }
+
+    @Override
+    public void onBackupError(String message) {
+
+    }
+
+    @Override
+    public void onRestoreError(String message) {
+
     }
 }
