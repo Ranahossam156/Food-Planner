@@ -45,4 +45,18 @@ public class FavoritePresenterImplementation implements FavoritePresenter{
                         }
                 );
     }
+    @Override
+    public void setGuest(boolean isGuest) {
+        repo.setIsGuest(isGuest);
+    }
+
+    @Override
+    public Boolean isGuest() {
+        boolean isGuest= repo.isUserGuest();
+        if (view != null) {
+            view.showGuestMessage(isGuest);
+        }
+        return isGuest;
+    }
+
 }

@@ -8,6 +8,11 @@ public class UserBackup {
 
     public UserBackup() {}
 
+    public UserBackup(List<MealElement> favorites, List<PlannedMeal> planned) {
+        this.favorites=favorites;
+        this.plannedMeals=planned;
+    }
+
     public List<MealElement> getFavorites() { return favorites; }
     public void setFavorites(List<MealElement> favorites) { this.favorites = favorites; }
 

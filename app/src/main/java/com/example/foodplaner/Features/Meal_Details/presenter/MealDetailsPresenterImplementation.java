@@ -51,4 +51,17 @@ public class MealDetailsPresenterImplementation implements MealDetailsPresenter{
                     mealDetailsView.showError("Failed to add to favorites: " + throwable.getMessage());
                 });
     }
+    @Override
+    public void setGuest(boolean isGuest) {
+        mealRepository.setIsGuest(isGuest);
+    }
+
+    @Override
+    public Boolean isGuest() {
+        boolean isGuest= mealRepository.isUserGuest();
+        if (mealDetailsView != null) {
+            mealDetailsView.showGuestMessage(isGuest);
+        }
+        return isGuest;
+    }
 }

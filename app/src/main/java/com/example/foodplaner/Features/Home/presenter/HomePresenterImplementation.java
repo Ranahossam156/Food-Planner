@@ -10,6 +10,7 @@ import com.example.foodplaner.model.CountryModel;
 import com.example.foodplaner.model.Meal;
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepository;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
@@ -23,6 +24,17 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class HomePresenterImplementation implements HomePresenter, AuthView {
     HomeView homeView;
+
+    @Override
+    public void onAuthSuccess(FirebaseUser user) {
+
+    }
+
+    @Override
+    public void onAuthFailure(String message) {
+
+    }
+
     MealRepository mealRepository;
 
     public HomePresenterImplementation(HomeView homeView, MealRepository mealRepository) {
@@ -102,6 +114,16 @@ public class HomePresenterImplementation implements HomePresenter, AuthView {
                             homeView.showError(error.getMessage());
                         }
                 );
+    }
+
+    @Override
+    public void setGuest(boolean isGuest) {
+        mealRepository.setIsGuest(isGuest);
+    }
+
+    @Override
+    public Boolean isGuest() {
+        return mealRepository.isUserGuest();
     }
 
     @Override

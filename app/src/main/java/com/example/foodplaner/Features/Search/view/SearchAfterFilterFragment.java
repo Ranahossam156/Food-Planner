@@ -17,6 +17,7 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
+import com.example.foodplaner.Database.SharedPrefrencesDataSourceImplementation;
 import com.example.foodplaner.Features.Search.presenter.SearchAfterFilterPresenter;
 import com.example.foodplaner.Features.Search.presenter.SearchAfterFilterPresenterImplementation;
 import com.example.foodplaner.Features.ShowSpecificMeals.presenter.SpecificMealsPresenter;
@@ -31,6 +32,7 @@ import com.example.foodplaner.R;
 import com.example.foodplaner.model.FilteredMeal;
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepositoryImplementation;
+import com.example.foodplaner.network.FirebaseDataSourceImpl;
 import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
 
 import java.util.List;
@@ -73,7 +75,7 @@ public class SearchAfterFilterFragment extends Fragment implements SearchAfterFi
         gridView = view.findViewById(R.id.filtercategoriesgridRecyclerView);
         categoriesGridAdapter = new MealsGridAdapter(getContext(),this,this);
         gridView.setAdapter(categoriesGridAdapter);
-        searchAfterFilterPresenter =new SearchAfterFilterPresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()),MealsRemoteDataSourceImplementaion.getInstance()));
+        searchAfterFilterPresenter =new SearchAfterFilterPresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()),MealsRemoteDataSourceImplementaion.getInstance(), FirebaseDataSourceImpl.getInstance(getContext()), SharedPrefrencesDataSourceImplementation.getInstance(getContext())));
         searchAfterFilterPresenter.getSpecificMealsByCategories(filterName);
         searchAfterFilterPresenter.getSpecificMealsByCountries(filterName);
         searchAfterFilterPresenter.getSpecificMealsByIngredients(filterName);

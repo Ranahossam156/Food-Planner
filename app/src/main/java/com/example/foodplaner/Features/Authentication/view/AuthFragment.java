@@ -14,14 +14,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.foodplaner.Features.Authentication.presenter.AuthPresenter;
+import com.example.foodplaner.Features.Authentication.presenter.AuthPresenterImplementation;
 import com.example.foodplaner.R;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AuthFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AuthFragment extends Fragment {
+public class AuthFragment extends Fragment implements AuthView {
+    AuthPresenter authPresenter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,6 +80,7 @@ public class AuthFragment extends Fragment {
         Button continueAsGuestButton = view.findViewById(R.id.continueasguest);
         Button Login = view.findViewById(R.id.signinButtonauth);
         Button Signup = view.findViewById(R.id.signupButtonauth);
+        authPresenter=new AuthPresenterImplementation(getContext(),this);
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,9 +92,7 @@ public class AuthFragment extends Fragment {
         continueAsGuestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPrefs = getActivity().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-                sharedPrefs.edit().putBoolean("isGuest", true).apply();
-
+                authPresenter.setGuest(true);
                 Navigation.findNavController(requireView())
                         .navigate(AuthFragmentDirections.actionAuthFragmentToHomeFragment());
             }
@@ -101,6 +104,36 @@ public class AuthFragment extends Fragment {
                         .navigate(AuthFragmentDirections.actionAuthFragmentToLoginFragment());
             }
         });
+
+    }
+
+    @Override
+    public void onBackupSuccess() {
+
+    }
+
+    @Override
+    public void onRestoreSuccess() {
+
+    }
+
+    @Override
+    public void onBackupError(String message) {
+
+    }
+
+    @Override
+    public void onRestoreError(String message) {
+
+    }
+
+    @Override
+    public void onAuthSuccess(FirebaseUser user) {
+
+    }
+
+    @Override
+    public void onAuthFailure(String message) {
 
     }
 }

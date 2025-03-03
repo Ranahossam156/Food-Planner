@@ -64,4 +64,13 @@ public class PlannedMealPresenterImplementation implements PlanMealsPresenter{
                         }
                 );
     }
+    @Override
+    public void setGuest(boolean isGuest) {
+        repo.setIsGuest(isGuest);
+    }
+
+    @Override
+    public Boolean isGuest() {
+        return repo.isUserGuest();
+    }
 }

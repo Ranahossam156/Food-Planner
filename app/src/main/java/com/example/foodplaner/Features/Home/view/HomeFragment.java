@@ -1,5 +1,7 @@
 package com.example.foodplaner.Features.Home.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,9 +21,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
+import com.example.foodplaner.Database.SharedPrefrencesDataSourceImplementation;
 import com.example.foodplaner.Features.Authentication.presenter.AuthPresenter;
 import com.example.foodplaner.Features.Authentication.presenter.AuthPresenterImplementation;
 import com.example.foodplaner.Features.Authentication.view.AuthView;
@@ -34,6 +38,7 @@ import com.example.foodplaner.model.Meal;
 import com.example.foodplaner.model.MealCountry;
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepositoryImplementation;
+import com.example.foodplaner.network.FirebaseDataSourceImpl;
 import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,9 +47,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class HomeFragment extends Fragment implements HomeView, OnCategoryClickListener,OnCountryClickListener, AuthView {
+public class HomeFragment extends Fragment implements HomeView, OnCategoryClickListener, OnCountryClickListener, AuthView {
     CategoriesAdapter categoriesAdapter;
-    RecyclerView CategoriesrecyclerView,countriesrecyclerView;
+    RecyclerView CategoriesrecyclerView, countriesrecyclerView;
     ImageView mealOfTheDayImage;
     TextView mealOfTheDayName;
     private Meal randomMeal;
@@ -69,7 +74,6 @@ public class HomeFragment extends Fragment implements HomeView, OnCategoryClickL
         super.onCreate(savedInstanceState);
 
 
-
     }
 
     @Override
@@ -84,9 +88,9 @@ public class HomeFragment extends Fragment implements HomeView, OnCategoryClickL
         super.onViewCreated(view, savedInstanceState);
         CategoriesrecyclerView = view.findViewById(R.id.CategoriesRecyclerView);
         CategoriesrecyclerView.setHasFixedSize(true);
-        mealCard=view.findViewById(R.id.mealCard);
-        homePresenter = new HomePresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(this.getContext()),MealsRemoteDataSourceImplementaion.getInstance()));
-        countriesrecyclerView=view.findViewById(R.id.CountriesRecyclerView);
+        mealCard = view.findViewById(R.id.mealCard);
+        homePresenter = new HomePresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(this.getContext()), MealsRemoteDataSourceImplementaion.getInstance(), FirebaseDataSourceImpl.getInstance(getContext()), SharedPrefrencesDataSourceImplementation.getInstance(getContext())));
+        countriesrecyclerView = view.findViewById(R.id.CountriesRecyclerView);
         countriesrecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -94,20 +98,20 @@ public class HomeFragment extends Fragment implements HomeView, OnCategoryClickL
         countrieslayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         CategoriesrecyclerView.setLayoutManager(layoutManager);
         countriesrecyclerView.setLayoutManager(countrieslayoutManager);
-        categoriesAdapter = new CategoriesAdapter(getContext(),this);
-        countriesAdapter=new CountriesAdapter(getContext(),this);
+        categoriesAdapter = new CategoriesAdapter(getContext(), this);
+        countriesAdapter = new CountriesAdapter(getContext(), this);
         countriesrecyclerView.setAdapter(countriesAdapter);
         CategoriesrecyclerView.setAdapter(categoriesAdapter);
         List<Category> categories = new ArrayList<>();
-        mealOfTheDayImage=view.findViewById(R.id.MealOfTheDayImage);
-        mealOfTheDayName=view.findViewById(R.id.MealOfTheDayName);
-        logout=view.findViewById(R.id.logouticon);
+        mealOfTheDayImage = view.findViewById(R.id.MealOfTheDayImage);
+        mealOfTheDayName = view.findViewById(R.id.MealOfTheDayName);
+        logout = view.findViewById(R.id.logouticon);
         homePresenter.getRandomMeal();
         homePresenter.getCategories();
         homePresenter.getCountries();
-         auth = FirebaseAuth.getInstance();
-         user = auth.getCurrentUser();
-         authPresenter=new AuthPresenterImplementation(getContext(),this);
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        authPresenter = new AuthPresenterImplementation(getContext(), this);
         navController = NavHostFragment.findNavController(this);
 
         mealCard.setOnClickListener(v -> {
@@ -116,19 +120,38 @@ public class HomeFragment extends Fragment implements HomeView, OnCategoryClickL
                 navController.navigate(action);
             }
         });
-        logout.setOnClickListener(view2 -> {
-        showLogoutConfirmationDialog();
-                });
+        boolean isGuest = homePresenter.isGuest();
+
+        if (isGuest) {
+            logout.setImageResource(R.drawable.login);
+            logout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    NavDirections action = HomeFragmentDirections.actionHomeFragmentToSigninFragment();
+                    Navigation.findNavController(requireView()).navigate(action);
+                }
+            });
+        }
+        else{
+            logout.setVisibility(view.VISIBLE);
+            logout.setOnClickListener(view2 -> {
+                showLogoutConfirmationDialog();
+            });
+        }
+
 
     }
+
     private void showLogoutConfirmationDialog() {
         DialogUtils.showConfirmationDialog(requireContext(),
                 "Are you sure you want to logout?",
                 (dialog, which) -> {
-                    authPresenter.backupDataOnLogout(user.getUid());
-                    FirebaseAuth.getInstance().signOut();
-                    NavDirections action = HomeFragmentDirections.actionHomeFragmentToSigninFragment();
-                    Navigation.findNavController(requireView()).navigate(action);
+                    if (user != null) {
+                        authPresenter.backupDataOnLogout(user.getUid());
+                        homePresenter.setGuest(true);
+                    } else {
+                        Toast.makeText(getContext(), "No user logged in!", Toast.LENGTH_SHORT).show();
+                    }
 
                 });
     }
@@ -156,7 +179,7 @@ public class HomeFragment extends Fragment implements HomeView, OnCategoryClickL
 
     @Override
     public void showError(String errorMsg) {
-        Log.i("Home Fragment", "showError: "+errorMsg);
+        Log.i("Home Fragment", "showError: " + errorMsg);
     }
 
     @Override
@@ -173,7 +196,16 @@ public class HomeFragment extends Fragment implements HomeView, OnCategoryClickL
 
     @Override
     public void onBackupSuccess() {
+        FirebaseAuth.getInstance().signOut();
+        if (isAdded()) {
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(HomeFragmentDirections.actionHomeFragmentToSigninFragment());
+        }
+    }
 
+    @Override
+    public void onBackupError(String message) {
+        Toast.makeText(getContext(), "Backup failed: " + message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -182,12 +214,17 @@ public class HomeFragment extends Fragment implements HomeView, OnCategoryClickL
     }
 
     @Override
-    public void onBackupError(String message) {
+    public void onRestoreError(String message) {
 
     }
 
     @Override
-    public void onRestoreError(String message) {
+    public void onAuthSuccess(FirebaseUser user) {
+
+    }
+
+    @Override
+    public void onAuthFailure(String message) {
 
     }
 

@@ -1,5 +1,7 @@
 package com.example.foodplaner.Features.PlanMeals.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
+import com.example.foodplaner.Database.SharedPrefrencesDataSourceImplementation;
 import com.example.foodplaner.Features.PlanMeals.presenter.PlanMealsPresenter;
 import com.example.foodplaner.Features.PlanMeals.presenter.PlannedMealPresenterImplementation;
 import com.example.foodplaner.R;
@@ -23,6 +27,7 @@ import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepository;
 import com.example.foodplaner.model.MealRepositoryImplementation;
 import com.example.foodplaner.model.PlannedMeal;
+import com.example.foodplaner.network.FirebaseDataSourceImpl;
 import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
 
 import java.text.SimpleDateFormat;
@@ -38,6 +43,7 @@ public class PlanFragment extends Fragment implements OnPlannedMealClicked, OnPl
     private MealRepository mealRepository;
     private DayAdapter adapter;
     PlanMealsPresenter planMealsPresenter;
+    TextView guestMessage2;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -51,11 +57,20 @@ public class PlanFragment extends Fragment implements OnPlannedMealClicked, OnPl
         super.onViewCreated(view, savedInstanceState);
 
         daysRecyclerView = view.findViewById(R.id.daysRecycleView);
-        planMealsPresenter=new PlannedMealPresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()), MealsRemoteDataSourceImplementaion.getInstance()));
+        planMealsPresenter=new PlannedMealPresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()), MealsRemoteDataSourceImplementaion.getInstance(),FirebaseDataSourceImpl.getInstance(getContext()),SharedPrefrencesDataSourceImplementation.getInstance(getContext())));
         mealRepository = MealRepositoryImplementation.getInstance(
                 MealsLocalDataSourceImplementation.getInstance(requireContext()),
-                MealsRemoteDataSourceImplementaion.getInstance()
+                MealsRemoteDataSourceImplementaion.getInstance(),FirebaseDataSourceImpl.getInstance(getContext()), SharedPrefrencesDataSourceImplementation.getInstance(getContext())
         );
+        guestMessage2=view.findViewById(R.id.guestmessage2);
+
+        if (planMealsPresenter.isGuest()) {
+            daysRecyclerView.setVisibility(View.GONE);
+            guestMessage2.setVisibility(View.VISIBLE);
+        } else {
+            daysRecyclerView.setVisibility(View.VISIBLE);
+            guestMessage2.setVisibility(View.GONE);
+        }
 
         setupRecyclerView();
         planMealsPresenter.getPlannedMeals();}

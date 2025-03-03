@@ -1,5 +1,7 @@
 package com.example.foodplaner.Features.Favorites.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,9 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
+import com.example.foodplaner.Database.SharedPrefrencesDataSourceImplementation;
 import com.example.foodplaner.Features.Favorites.presenter.FavoritePresenter;
 import com.example.foodplaner.Features.Favorites.presenter.FavoritePresenterImplementation;
 import com.example.foodplaner.Features.ShowSpecificMeals.view.OnFavoriteClickListener;
@@ -23,6 +27,7 @@ import com.example.foodplaner.R;
 import com.example.foodplaner.Utils.DialogUtils;
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepositoryImplementation;
+import com.example.foodplaner.network.FirebaseDataSourceImpl;
 import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
 
 import java.util.List;
@@ -31,11 +36,12 @@ public class FavoriteFragment extends Fragment implements FavoriteView , onFavor
     FavoritePresenter favoritePresenter;
     FavoriteGridAdapter favoriteGridAdapter;
     ImageView back;
+    TextView guestMessage;
+    GridView gridView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        favoritePresenter=new FavoritePresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()), MealsRemoteDataSourceImplementaion.getInstance()));
     }
 
     @Override
@@ -47,19 +53,15 @@ public class FavoriteFragment extends Fragment implements FavoriteView , onFavor
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        favoritePresenter=new FavoritePresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()), MealsRemoteDataSourceImplementaion.getInstance(),FirebaseDataSourceImpl.getInstance(getContext()), SharedPrefrencesDataSourceImplementation.getInstance(getContext())));
         super.onViewCreated(view, savedInstanceState);
-        GridView gridView = view.findViewById(R.id.favoritegridRecyclerView);
+        gridView = view.findViewById(R.id.favoritegridRecyclerView);
         favoriteGridAdapter = new FavoriteGridAdapter(getContext(),this,this,this);
         gridView.setAdapter(favoriteGridAdapter);
         favoritePresenter.getFavoriteMeals();
-      //  back=view.findViewById(R.id.back);
-//        back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Navigation.findNavController(view).navigateUp();
-//
-//            }
-//        });
+        guestMessage=view.findViewById(R.id.guestmessage);
+        favoritePresenter.isGuest();
+
     }
 
     @Override
@@ -89,4 +91,16 @@ public class FavoriteFragment extends Fragment implements FavoriteView , onFavor
                 "Are you sure you want to remove this item?",
                 (dialog, which) -> favoritePresenter.onFavoriteRemoved(mealElement));
     }
+
+    @Override
+    public void showGuestMessage(boolean isGuest) {
+        if (isGuest) {
+            gridView.setVisibility(View.GONE);
+            guestMessage.setVisibility(View.VISIBLE);
+        } else {
+            gridView.setVisibility(View.VISIBLE);
+            guestMessage.setVisibility(View.GONE);
+        }
+    }
+
 }

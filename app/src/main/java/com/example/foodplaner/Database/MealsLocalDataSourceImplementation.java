@@ -1,6 +1,7 @@
 package com.example.foodplaner.Database;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.PlannedMeal;
@@ -88,4 +89,10 @@ public class MealsLocalDataSourceImplementation implements MealsLocalDataSource 
     public Completable insertAllPlannedMeals(List<PlannedMeal> meals) {
         return planDAO.insertAllPlannedMeals(meals).subscribeOn(Schedulers.io());
     }
+    @Override
+    public boolean isUserGuest() {
+        SharedPreferences sharedPrefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        return sharedPrefs.getBoolean("isGuest", false);
+    }
+
 }

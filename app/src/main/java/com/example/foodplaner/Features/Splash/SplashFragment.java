@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplaner.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,7 +78,14 @@ public class SplashFragment extends Fragment {
         lottieAnimationView.addAnimatorListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                Navigation.findNavController(view).navigate(R.id.action_splashFragment_to_authFragment);
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+
+                    Navigation.findNavController(view)
+                            .navigate(R.id.action_splashFragment_to_homeFragment);
+                } else {
+                    Navigation.findNavController(view)
+                            .navigate(R.id.action_splashFragment_to_authFragment);
+                }
             }
         });
     }

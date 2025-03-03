@@ -43,22 +43,13 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class SigninFragment extends Fragment implements AuthView{
-
-    EditText emailEditText, passwordEditText;
-    Button signInButton, googleSignIn;
-    TextView doNotHaveAnAccount;
-    ProgressBar progressBar;
-    FirebaseAuth auth;
-    AuthPresenter authPresenter;
-    GoogleSignInClient googleSignInClient;
-    FirebaseUser user;
+public class SigninFragment extends Fragment implements AuthView {
+    private EditText emailEditText, passwordEditText;
+    private Button signInButton, googleSignIn;
+    private TextView doNotHaveAnAccount;
+    private AuthPresenter authPresenter;
+    private GoogleSignInClient googleSignInClient;
     private static final int RC_SIGN_IN = 123;
-
-    public SigninFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,33 +64,29 @@ public class SigninFragment extends Fragment implements AuthView{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSignInOptions);
-        auth = FirebaseAuth.getInstance();
         emailEditText = view.findViewById(R.id.emailTextFieldlogin);
         passwordEditText = view.findViewById(R.id.PasswordTextFieldlogin);
         signInButton = view.findViewById(R.id.signinButton);
         doNotHaveAnAccount = view.findViewById(R.id.doNotHaveAnAccount);
         googleSignIn = view.findViewById(R.id.googleButtonLogin);
-        auth=FirebaseAuth.getInstance();
-        //auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-        authPresenter=new AuthPresenterImplementation(getContext(),this);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id)) // Ensure this ID is correct
+                .requestEmail()
+                .build();
 
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso);
+        authPresenter = new AuthPresenterImplementation(getContext(), this);
 
-        doNotHaveAnAccount.setOnClickListener(view1 -> {
-            Navigation.findNavController(requireView())
-                    .navigate(SigninFragmentDirections.actionSigninFragmentToLoginFragment());
+        signInButton.setOnClickListener(v -> signInWithEmail());
+        googleSignIn.setOnClickListener(v -> signInWithGoogle());
+        doNotHaveAnAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(
+                        SigninFragmentDirections.actionSigninFragmentToLoginFragment()
+                );
+            }
         });
-
-        signInButton.setOnClickListener(view12 -> signInWithEmail());
-
-        googleSignIn.setOnClickListener(view13 -> signInWithGoogle());
     }
 
     private void signInWithEmail() {
@@ -107,32 +94,16 @@ public class SigninFragment extends Fragment implements AuthView{
         String password = passwordEditText.getText().toString().trim();
 
         if (isFieldsValid()) {
-            auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            SharedPreferences sharedPrefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-                            sharedPrefs.edit().putBoolean("isGuest", false).apply();
-                            user = auth.getCurrentUser();
-                            if (user != null) {
-                                authPresenter.restoreDataOnLogin(user.getUid());
-                            } else {
-                                Log.e("TAG", "User is null after login");
-                            }
-                        } else {
-                            Log.w("TAG", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(getContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            authPresenter.signInWithEmail(email, password);
+            authPresenter.setGuest(false);
         }
-
     }
 
     private void signInWithGoogle() {
         googleSignInClient.signOut().addOnCompleteListener(task -> {
             Intent signInIntent = googleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
-        });
-    }
+        });}
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -142,34 +113,24 @@ public class SigninFragment extends Fragment implements AuthView{
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                Log.d("TAG", "firebaseAuthWithGoogle:" + account.getId());
-                firebaseAuthWithGoogle(account.getIdToken());
+                authPresenter.signInWithGoogle(account.getIdToken());
+                authPresenter.setGuest(false);
             } catch (ApiException e) {
-                Log.w("TAG", "Google sign in failed", e);
                 Toast.makeText(getContext(), "Google Sign-In Failed", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener(requireActivity(), task -> {
-                    if (task.isSuccessful()) {
-                        SharedPreferences sharedPrefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-                        sharedPrefs.edit().putBoolean("isGuest", false).apply();
-                        user = auth.getCurrentUser();
-                        if (user != null) {
-                            authPresenter.restoreDataOnLogin(user.getUid()); // Now user is not null
-                        } else {
-                            Log.e("TAG", "User is null after login");
-                        }
-                    } else {
-                        Log.w("TAG", "signInWithEmail:failure", task.getException());
-                        Toast.makeText(getContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
-                    }
+    @Override
+    public void onBackupSuccess() {
 
-                });
+    }
+
+    @Override
+    public void onRestoreSuccess() {
+        SharedPreferences sharedPrefs = getContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        sharedPrefs.edit().putBoolean("isGuest", false).apply();
+        navigateToHome();
     }
     private void navigateToHome() {
         NavOptions navOptions = new NavOptions.Builder()
@@ -178,6 +139,26 @@ public class SigninFragment extends Fragment implements AuthView{
 
         NavDirections action = SigninFragmentDirections.actionSigninFragmentToHomeFragment();
         Navigation.findNavController(requireView()).navigate(action, navOptions);
+    }
+    @Override
+    public void onBackupError(String message) {
+
+    }
+
+    @Override
+    public void onRestoreError(String message) {
+        Toast.makeText(getContext(), "Restore failed: " + message, Toast.LENGTH_SHORT).show();
+        navigateToHome();
+    }
+
+    @Override
+    public void onAuthSuccess(FirebaseUser user) {
+
+    }
+
+    @Override
+    public void onAuthFailure(String message) {
+
     }
 
     private boolean validateEmail() {
@@ -207,25 +188,5 @@ public class SigninFragment extends Fragment implements AuthView{
 
     private boolean isFieldsValid() {
         return validateEmail() && validatePassword();
-    }
-
-    @Override
-    public void onBackupSuccess() {
-
-    }
-
-    @Override
-    public void onRestoreSuccess() {
-        navigateToHome();
-    }
-
-    @Override
-    public void onBackupError(String message) {
-
-    }
-
-    @Override
-    public void onRestoreError(String message) {
-
     }
 }

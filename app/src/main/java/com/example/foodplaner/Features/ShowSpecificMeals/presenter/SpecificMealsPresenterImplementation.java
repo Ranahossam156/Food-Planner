@@ -106,5 +106,19 @@ public class SpecificMealsPresenterImplementation implements SpecificMealsPresen
                 });
     }
 
+    @Override
+    public void setGuest(boolean isGuest) {
+        mealRepository.setIsGuest(isGuest);
+    }
+
+    @Override
+    public Boolean isGuest() {
+        boolean isGuest = mealRepository.isUserGuest();
+        if (specificMealsView != null) {
+            specificMealsView.showGuestMessage(isGuest);
+        }
+        return  isGuest;
+    }
+
 
 }

@@ -7,11 +7,13 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
+import com.example.foodplaner.Database.SharedPrefrencesDataSourceImplementation;
 import com.example.foodplaner.Features.Authentication.view.AuthView;
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepository;
 import com.example.foodplaner.model.MealRepositoryImplementation;
 import com.example.foodplaner.model.PlannedMeal;
+import com.example.foodplaner.network.FirebaseDataSourceImpl;
 import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -28,7 +30,7 @@ public class AuthPresenterImplementation implements AuthPresenter {
         this.firestore = FirebaseFirestore.getInstance();
         this.context=context;
         this.authView=authView;
-        mealRepository= MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(context.getApplicationContext()), MealsRemoteDataSourceImplementaion.getInstance());
+        mealRepository= MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(context.getApplicationContext()), MealsRemoteDataSourceImplementaion.getInstance(), FirebaseDataSourceImpl.getInstance(context), SharedPrefrencesDataSourceImplementation.getInstance(context));
     }
 
 
@@ -50,7 +52,11 @@ public class AuthPresenterImplementation implements AuthPresenter {
                 .subscribe(() -> {
                     authView.onBackupSuccess();
                 }, throwable -> {
-                    authView.onBackupError(throwable.getMessage());
+                    String errorMessage = "Backup failed: " + throwable.getMessage();
+                    if (throwable.getMessage().contains("Failed to delete previous backup")) {
+                        errorMessage += "\nPlease check your internet connection";
+                    }
+                    authView.onBackupError(errorMessage);
                 });
     }
 
@@ -66,4 +72,33 @@ public class AuthPresenterImplementation implements AuthPresenter {
                     authView.onRestoreError(throwable.getMessage());
                 });
     }
+    @Override
+    public void signInWithEmail(String email, String password) {
+        mealRepository.signInWithEmail(email, password, authView);
+    }
+
+    @Override
+    public void signInWithGoogle(String idToken) {
+        mealRepository.signInWithGoogle(idToken, authView);
+    }
+    @Override
+    public void signUpWithEmail(String email, String password) {
+        mealRepository.signUpWithEmail(email, password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        user -> authView.onAuthSuccess(user),
+                        error -> authView.onAuthFailure(error.getMessage())
+                );
+    }
+    @Override
+    public void setGuest(boolean isGuest) {
+        mealRepository.setIsGuest(isGuest);
+    }
+
+    @Override
+    public Boolean isGuest() {
+        return mealRepository.isUserGuest();
+    }
+
 }

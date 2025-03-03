@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface FavoriteView {
     void getFavorites(List<MealElement> meals);
+    void showGuestMessage(boolean isGuest);
+
 }

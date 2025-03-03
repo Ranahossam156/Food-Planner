@@ -29,6 +29,13 @@ public class MealsGridAdapter extends BaseAdapter {
     private List<FilteredMeal> categoryList = new ArrayList<>();
     OnMealClickListener onMealClickListener;
     OnFavoriteClickListener onFavoriteClickListener;
+    private boolean isGuest = false;
+
+    public void setGuestMode(boolean isGuest) {
+        this.isGuest = isGuest;
+        notifyDataSetChanged();
+    }
+
 
     public MealsGridAdapter(Context context, OnMealClickListener onMealClickListener, OnFavoriteClickListener onFavoriteClickListener) {
         this.context = context;
@@ -91,29 +98,22 @@ public class MealsGridAdapter extends BaseAdapter {
                 .load(filteredMeal.getStrMealThumb())
                 .into(holder.categoryImage);
         convertView.setOnClickListener(view -> onMealClickListener.onMealClick(filteredMeal.getidMeal()));
-        SharedPreferences sharedPrefs =  context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-        boolean isGuest = sharedPrefs.getBoolean("isGuest", false);
-        if(isGuest)
-        {
+        if (isGuest) {
             holder.heartImage.setAlpha(0.5f);
-            holder.heartImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogUtils.showConfirmationDialog(context,
-                            "To Add to favorites you must signin",
-                            (dialog, which) -> Navigation.findNavController(v)
-                                    .navigate(MealDetailsFragmentDirections.actionMealDetailsFragmentToSigninFragment()));
+            holder.heartImage.setOnClickListener(v -> {
+                DialogUtils.showConfirmationDialog(context,
+                        "To Add to favorites you must sign in",
+                        (dialog, which) -> Navigation.findNavController(v)
+                                .navigate(MealDetailsFragmentDirections.actionMealDetailsFragmentToSigninFragment()));
+            });
+        } else {
+            holder.heartImage.setOnClickListener(view -> {
+                if (onFavoriteClickListener != null) {
+                    onFavoriteClickListener.onFavProductClick(filteredMeal.getidMeal());
+                    holder.heartImage.setImageResource(R.drawable.redheartfilled);
                 }
             });
-        }else{
-        holder.heartImage.setOnClickListener(view -> {
-            if (onFavoriteClickListener != null) {
-
-                onFavoriteClickListener.onFavProductClick(filteredMeal.getidMeal());
-                holder.heartImage.setImageResource(R.drawable.redheartfilled);
-
-            }
-        });}
+        }
         return convertView;
     }
 

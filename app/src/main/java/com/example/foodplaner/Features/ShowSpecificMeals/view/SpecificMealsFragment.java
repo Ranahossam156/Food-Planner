@@ -15,6 +15,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
+import com.example.foodplaner.Database.SharedPrefrencesDataSourceImplementation;
 import com.example.foodplaner.Features.Home.view.HomeFragmentDirections;
 import com.example.foodplaner.Features.ShowSpecificMeals.presenter.SpecificMealsPresenterImplementation;
 import com.example.foodplaner.Features.ShowSpecificMeals.presenter.SpecificMealsPresenter;
@@ -23,6 +24,7 @@ import com.example.foodplaner.model.FilteredMeal;
 import com.example.foodplaner.model.Meal;
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepositoryImplementation;
+import com.example.foodplaner.network.FirebaseDataSourceImpl;
 import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
 
 import java.util.List;
@@ -59,10 +61,11 @@ public class SpecificMealsFragment extends Fragment implements SpecificMealsView
         GridView gridView = view.findViewById(R.id.categoriesgridRecyclerView);
         categoriesGridAdapter = new MealsGridAdapter(getContext(),this,this);
         gridView.setAdapter(categoriesGridAdapter);
-        specificMealsPresenter =new SpecificMealsPresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()),MealsRemoteDataSourceImplementaion.getInstance()));
+        specificMealsPresenter =new SpecificMealsPresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()),MealsRemoteDataSourceImplementaion.getInstance(),FirebaseDataSourceImpl.getInstance(getContext()), SharedPrefrencesDataSourceImplementation.getInstance(getContext())));
         specificMealsPresenter.getSpecificMealsByCategories(filterName);
         specificMealsPresenter.getSpecificMealsByCountries(filterName);
         specificMealsPresenter.getSpecificMealsByIngredients(filterName);
+        specificMealsPresenter.isGuest();
 
     }
 
@@ -92,6 +95,11 @@ public class SpecificMealsFragment extends Fragment implements SpecificMealsView
 
     @Override
     public void showFavoriteAddedSuccess() {
+    }
+
+    @Override
+    public void showGuestMessage(boolean isGuest) {
+        categoriesGridAdapter.setGuestMode(isGuest);
     }
 
 

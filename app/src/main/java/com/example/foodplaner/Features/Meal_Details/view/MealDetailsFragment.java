@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
+import com.example.foodplaner.Database.SharedPrefrencesDataSourceImplementation;
 import com.example.foodplaner.Features.Meal_Details.presenter.MealDetailsPresenter;
 import com.example.foodplaner.Features.Meal_Details.presenter.MealDetailsPresenterImplementation;
 import com.example.foodplaner.R;
@@ -29,6 +30,7 @@ import com.example.foodplaner.model.IngredientItem;
 import com.example.foodplaner.model.MealElement;
 import com.example.foodplaner.model.MealRepositoryImplementation;
 import com.example.foodplaner.model.PlannedMeal;
+import com.example.foodplaner.network.FirebaseDataSourceImpl;
 import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
@@ -85,31 +87,11 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView{
         instructions.setText(meal.getStrInstructions());
         Glide.with(this).load(meal.getStrMealThumb()).into(mealImage);
         setupIngredientsRecyclerView(meal);
-        mealDetailsPresenter=new MealDetailsPresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()), MealsRemoteDataSourceImplementaion.getInstance()));
+        mealDetailsPresenter=new MealDetailsPresenterImplementation(this, MealRepositoryImplementation.getInstance(MealsLocalDataSourceImplementation.getInstance(getContext()), MealsRemoteDataSourceImplementaion.getInstance(),FirebaseDataSourceImpl.getInstance(getContext()), SharedPrefrencesDataSourceImplementation.getInstance(getContext())));
         youTubePlayerView = view.findViewById(R.id.meal_video);
         getLifecycle().addObserver(youTubePlayerView);
-        SharedPreferences sharedPrefs =  requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-        boolean isGuest = sharedPrefs.getBoolean("isGuest", false);
 
-        if (isGuest) {
-            disableRestrictedFeatures();
-        }
-        else{
-            heart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mealDetailsPresenter.OnFavoriteClicked(meal.getIdMeal());
-                    heart.setImageResource(R.drawable.redheartfilled);
-                    Toast.makeText(getContext(), "Added to favorite", Toast.LENGTH_SHORT).show();
-                }
-            });
-        planImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDayPickerDialog();
-                Toast.makeText(getContext(), "Plan Added Successfully", Toast.LENGTH_SHORT).show();
-            }
-        });}
+        mealDetailsPresenter.isGuest();
         String youtubeUrl = meal.getStrYoutube();
         if(youtubeUrl != null && !youtubeUrl.isEmpty()) {
             youtubeVideoId = extractYoutubeId(youtubeUrl);
@@ -275,5 +257,28 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView{
     @Override
     public void showFavoriteAddedSuccess() {
 
+    }
+
+    @Override
+    public void showGuestMessage(boolean isGuest) {
+        if (isGuest) {
+            disableRestrictedFeatures();
+        }
+        else{
+            heart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mealDetailsPresenter.OnFavoriteClicked(meal.getIdMeal());
+                    heart.setImageResource(R.drawable.redheartfilled);
+                    Toast.makeText(getContext(), "Added to favorite", Toast.LENGTH_SHORT).show();
+                }
+            });
+            planImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showDayPickerDialog();
+                    Toast.makeText(getContext(), "Plan Added Successfully", Toast.LENGTH_SHORT).show();
+                }
+            });}
     }
 }

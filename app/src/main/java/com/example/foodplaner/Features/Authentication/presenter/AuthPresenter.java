@@ -12,8 +12,15 @@ import io.reactivex.rxjava3.core.Single;
 
 public interface AuthPresenter {
     public Single<List<MealElement>> downloadFavorites();
+
     public Single<List<PlannedMeal>> downloadPlannedMeals();
-//    public Completable uploadPlannedMeals(List<PlannedMeal> plannedMeals);
+
     public void backupDataOnLogout(String userId);
+
     public void restoreDataOnLogin(String userId);
+    public void signInWithEmail(String email, String password);
+    public void signInWithGoogle(String idToken);
+    public void signUpWithEmail(String email, String password);
+    void setGuest(boolean isGuest);
+    Boolean isGuest();
 }

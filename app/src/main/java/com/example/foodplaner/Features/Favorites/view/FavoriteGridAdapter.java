@@ -81,7 +81,6 @@ public class FavoriteGridAdapter extends BaseAdapter {
                 onRemoveClickListener.onRemoveClicked(mealElement);
             }
         });
-        //holder.heartImage.setOnClickListener(view -> onFavoriteClickListener.onFavProductClick(filteredMeal));
         return convertView;
     }
 

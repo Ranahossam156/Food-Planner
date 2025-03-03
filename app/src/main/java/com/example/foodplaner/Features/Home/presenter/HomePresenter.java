@@ -6,4 +6,6 @@ public interface HomePresenter {
     void getRandomMeal();
     void getCategories();
     void getCountries();
+    void setGuest(boolean isGuest);
+    Boolean isGuest();
 }

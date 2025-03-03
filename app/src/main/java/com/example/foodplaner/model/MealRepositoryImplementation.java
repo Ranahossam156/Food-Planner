@@ -1,30 +1,53 @@
 package com.example.foodplaner.model;
 
+import androidx.annotation.MainThread;
+
 import com.example.foodplaner.Database.MealsLocalDataSourceImplementation;
+import com.example.foodplaner.Database.SharedPrefrencesDataSource;
+import com.example.foodplaner.Database.SharedPrefrencesDataSourceImplementation;
+import com.example.foodplaner.Features.Authentication.view.AuthView;
+import com.example.foodplaner.network.FirebaseDataSource;
+import com.example.foodplaner.network.FirebaseDataSourceImpl;
 import com.example.foodplaner.network.MealsRemoteDataSourceImplementaion;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MealRepositoryImplementation implements MealRepository {
     MealsRemoteDataSourceImplementaion mealsRemoteDataSourceImplementaion;
     MealsLocalDataSourceImplementation mealsLocalDataSourceImplementation;
+    FirebaseDataSourceImpl firebaseDataSource;
     public static MealRepositoryImplementation repo=null;
+    private final FirebaseAuth auth;
+    private FirebaseFirestore firestore;
+    SharedPrefrencesDataSourceImplementation sharedPrefrencesDataSource;
 
-    public MealRepositoryImplementation(MealsLocalDataSourceImplementation mealsLocalDataSourceImplementation,MealsRemoteDataSourceImplementaion mealsRemoteDataSourceImplementaion) {
+
+
+    public MealRepositoryImplementation(MealsLocalDataSourceImplementation mealsLocalDataSourceImplementation, MealsRemoteDataSourceImplementaion mealsRemoteDataSourceImplementaion, FirebaseDataSourceImpl firebaseDataSource, SharedPrefrencesDataSourceImplementation sharedPrefrencesDataSourceImplementation) {
         this.mealsLocalDataSourceImplementation=mealsLocalDataSourceImplementation;
         this.mealsRemoteDataSourceImplementaion = mealsRemoteDataSourceImplementaion;
+        this.auth = FirebaseAuth.getInstance();
+        this.firestore = FirebaseFirestore.getInstance();
+        this.firebaseDataSource=firebaseDataSource;
+        this.sharedPrefrencesDataSource=sharedPrefrencesDataSourceImplementation;
     }
 
-    public static MealRepositoryImplementation getInstance(MealsLocalDataSourceImplementation mealsLocalDataSourceImplementation,MealsRemoteDataSourceImplementaion mealsRemoteDataSourceImplementaion){
+    public static MealRepositoryImplementation getInstance(MealsLocalDataSourceImplementation mealsLocalDataSourceImplementation,MealsRemoteDataSourceImplementaion mealsRemoteDataSourceImplementaion,FirebaseDataSourceImpl firebaseDataSource,SharedPrefrencesDataSourceImplementation sharedPrefrencesDataSourceImplementation){
         if (repo==null)
         {
-            repo =new MealRepositoryImplementation(mealsLocalDataSourceImplementation,mealsRemoteDataSourceImplementaion);
+            repo =new MealRepositoryImplementation(mealsLocalDataSourceImplementation,mealsRemoteDataSourceImplementaion,firebaseDataSource,sharedPrefrencesDataSourceImplementation);
         }
         return repo;
     }
@@ -38,6 +61,16 @@ public class MealRepositoryImplementation implements MealRepository {
     public Single<Categories> getCategories() {
         return mealsRemoteDataSourceImplementaion.getCategories();
     }
+    @Override
+    public boolean isUserGuest() {
+        return sharedPrefrencesDataSource.isGuest();
+    }
+
+    @Override
+    public void setIsGuest(boolean isGuest) {
+        sharedPrefrencesDataSource.setIsGuest(isGuest);
+    }
+
 
     @Override
     public Single<CountryModel> getMealsCountries() {
@@ -120,54 +153,28 @@ public class MealRepositoryImplementation implements MealRepository {
     public Completable insertAllPlannedMeals(List<PlannedMeal> plannedMeals) {
         return mealsLocalDataSourceImplementation.insertAllPlannedMeals(plannedMeals);
     }
-public Completable backupDataToFirestore(String userId, FirebaseFirestore firestore) {
-    return Single.zip(
-            getAllFavouriteMeals(),
-            getAllPlannedMeals(),
-            (favorites, planned) -> {
-                UserBackup backup = new UserBackup();
-                backup.setFavorites(favorites);
-                backup.setPlannedMeals(planned);
-                return backup;
-            }
-    ).flatMapCompletable(backup ->
-            Completable.create(emitter -> {
-                firestore.collection("users")
-                        .document(userId)
-                        .set(backup)
-                        .addOnSuccessListener(__ -> {
-                            // After backup, delete local data:
-                            removeAllFavoriteMeals()
-                                    .andThen(removeAllPlannedMeals())
-                                    .subscribe(emitter::onComplete, emitter::onError);
-                        })
-                        .addOnFailureListener(emitter::onError);
-            })
-    );
-}
-public Completable restoreDataFromFirestore(String userId, FirebaseFirestore firestore) {
-    return Completable.create(emitter -> {
-        firestore.collection("users")
-                .document(userId)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        UserBackup backup = documentSnapshot.toObject(UserBackup.class);
-                        if (backup != null) {
-                            Completable.mergeArray(
-                                    insertAllFavorites(backup.getFavorites()),
-                                    insertAllPlannedMeals(backup.getPlannedMeals())
-                            ).subscribe(emitter::onComplete, emitter::onError);
-                        } else {
-                            emitter.onError(new Exception("Invalid backup format"));
-                        }
-                    } else {
-                        emitter.onComplete();
-                    }
-                })
-                .addOnFailureListener(emitter::onError);
-    });
-}
+    public Completable backupDataToFirestore(String userId, FirebaseFirestore firestore) {
+        return firebaseDataSource.backupDataToFirestore(userId,firestore);
+    }
+
+    public Completable restoreDataFromFirestore(String userId, FirebaseFirestore firestore) {
+        return firebaseDataSource.restoreDataFromFirestore(userId, firestore);
+    }
+
+    @Override
+    public void signInWithEmail(String email, String password, AuthView authView) {
+         firebaseDataSource.signInWithEmail(email, password, authView);
+    }
+
+    @Override
+    public void signInWithGoogle(String idToken, AuthView authView) {
+         firebaseDataSource.signInWithGoogle(idToken, authView);
+    }
+
+    @Override
+    public Single<FirebaseUser> signUpWithEmail(String email, String password) {
+        return firebaseDataSource.signUpWithEmail(email, password);
+    }
 
 
 }

@@ -17,7 +17,7 @@ public interface MealDAO {
     @Query("SELECT * FROM favorite_meals_table")
     Single<List<MealElement>> getFavoriteMeals();
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertMealToFavorites(MealElement meal);
 
     @Delete
@@ -26,6 +26,6 @@ public interface MealDAO {
     @Query("DELETE FROM favorite_meals_table")
     Completable removeAllFavoriteMeals();
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertAllFavorites(List<MealElement> meals);
 }

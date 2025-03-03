@@ -5,4 +5,7 @@ import com.example.foodplaner.model.PlannedMeal;
 public interface MealDetailsPresenter {
     void OnFavoriteClicked(String id);
     void OnPlanClicked(PlannedMeal plannedMeal);
+    void setGuest(boolean isGuest);
+    Boolean isGuest();
+
 }

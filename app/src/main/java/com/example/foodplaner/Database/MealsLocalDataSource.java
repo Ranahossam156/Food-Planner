@@ -25,4 +25,5 @@ public interface MealsLocalDataSource {
 
     Completable insertAllFavorites(List<MealElement> meals);
     Completable insertAllPlannedMeals(List<PlannedMeal> meals);
+    boolean isUserGuest();
 }

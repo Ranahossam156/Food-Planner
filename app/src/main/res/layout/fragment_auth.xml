@@ -11,10 +11,10 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/signinButtonauth"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_width="168dp"
+        android:layout_height="42dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="376dp"
+        android:layout_marginTop="368dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/custom_button"
         android:backgroundTint="@color/primaryColor"
@@ -24,35 +24,35 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.548"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/continueasguest"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_width="168dp"
+        android:layout_height="42dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="480dp"
+        android:layout_marginTop="476dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/custom_button"
         android:backgroundTint="@color/primaryColor"
-        android:text="Continue as guest"
+        android:text="Guest mode"
         android:textColor="#FFFF"
         android:textColorLink="#9C3D30"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.548"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/signupButtonauth"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_width="168dp"
+        android:layout_height="45dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="268dp"
+        android:layout_marginTop="272dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/custom_button"
         android:backgroundTint="@color/primaryColor"
@@ -62,7 +62,7 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

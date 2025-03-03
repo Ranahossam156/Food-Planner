@@ -5,4 +5,6 @@ public interface MealDetailsView {
     void onPlanClick();
     void showError(String errorMsg);
     void showFavoriteAddedSuccess();
+    void showGuestMessage(boolean isGuest);
+
 }

@@ -14,4 +14,5 @@ public interface SpecificMealsView {
     void showError(String errorMsg);
 
     void showFavoriteAddedSuccess();
+    void showGuestMessage(boolean isGuest);
 }
